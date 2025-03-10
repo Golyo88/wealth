@@ -16,26 +16,6 @@ export class WealthService {
 
   constructor(private http: HttpClient) {}
 
-  searchWealth(
-    prompt: string,
-    page: number = 1,
-    pageSize: number = 10
-  ): Observable<PaginatedResponse<Wealth>> {
-    const params = new HttpParams()
-      .set('prompt', prompt)
-      .set('page', page.toString())
-      .set('page_size', pageSize.toString());
-
-    return this.http.get<PaginatedResponse<Wealth>>(
-      `${this.apiUrl}/query/openai`,
-      { params }
-    );
-  }
-
-  findById(id: string): Observable<Wealth> {
-    return this.http.get<Wealth>(`${this.apiUrl}/wealths/${id}`);
-  }
-
   getWealths(
     page: number = 1,
     pageSize: number = 10,
@@ -56,5 +36,9 @@ export class WealthService {
     return this.http.get<PaginatedResponse<Wealth>>(`${this.apiUrl}/wealths`, {
       params,
     });
+  }
+
+  findById(id: string): Observable<Wealth> {
+    return this.http.get<Wealth>(`${this.apiUrl}/wealths/${id}`);
   }
 }

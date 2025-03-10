@@ -1,34 +1,17 @@
 <div class="container mt-4">
   <div class="row">
     <div class="col-12">
-      <div class="search-container mb-4">
-        <div class="input-group">
-          <input 
-            type="text" 
-            class="form-control"
-            placeholder="Kérdezz az AI asszisztenstől..."
-            [(ngModel)]="searchInput"
-            (keyup.enter)="onSearch(searchInput)"
-          >
-          <span class="input-group-text">
-            <i class="bi bi-robot"></i>
-          </span>
-        </div>
-        <small class="text-muted mt-2">
-          <i class="bi bi-info-circle"></i>
-          Tegye fel kérdését az AI asszisztensnek, majd nyomjon Enter-t
-        </small>
-      </div>
-
       <!-- Szűrők -->
       <app-wealth-filter (filterChange)="onFiltersChange($event)"></app-wealth-filter>
 
+      <!-- Betöltés indikátor -->
       <div *ngIf="loading" class="text-center">
         <div class="spinner-border text-primary" role="status">
           <span class="visually-hidden">Betöltés...</span>
         </div>
       </div>
 
+      <!-- Lista -->
       <div class="wealth-list">
         <div *ngFor="let wealth of wealthList" class="card mb-3 wealth-card">
           <div class="card-body">

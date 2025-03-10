@@ -30,30 +30,16 @@ import { WealthFilterComponent } from '../wealth-filter/wealth-filter.component'
 export class WealthListComponent implements OnInit {
   wealthList: Wealth[] = [];
   loading = false;
-  searchTerm$ = new Subject<string>();
   currentPage = 1;
   pageSize = 10;
   totalItems = 0;
   totalPages = 0;
-  currentSearchTerm = '';
-  searchInput = '';
-  searchType: 'name' | 'ai' = 'name';
   currentFilters: WealthFilters = {};
 
   constructor(private wealthService: WealthService) {}
 
   ngOnInit() {
     this.loadWealths();
-
-    this.searchTerm$
-      .pipe(debounceTime(300), distinctUntilChanged())
-      .subscribe((term) => {
-        if (term) {
-          this.search(term);
-        } else {
-          this.loadWealths();
-        }
-      });
   }
 
   loadWealths() {
@@ -75,63 +61,10 @@ export class WealthListComponent implements OnInit {
       });
   }
 
-  onSearch(term: string) {
-    this.currentSearchTerm = term;
+  onFiltersChange(filters: WealthFilters) {
+    this.currentFilters = filters;
     this.currentPage = 1;
-    this.loading = true;
-
-    if (this.searchType === 'name') {
-      this.wealthService
-        .getWealths(this.currentPage, this.pageSize, { name: term })
-        .subscribe({
-          next: (response) => {
-            this.wealthList = response.results;
-            this.totalItems = response.pagination.total;
-            this.totalPages = response.pagination.total_pages;
-          },
-          error: (error) => {
-            console.error('Hiba történt:', error);
-          },
-          complete: () => {
-            this.loading = false;
-          },
-        });
-    } else {
-      this.wealthService
-        .searchWealth(term, this.currentPage, this.pageSize)
-        .subscribe({
-          next: (response) => {
-            this.wealthList = response.results;
-            this.totalItems = response.pagination.total;
-            this.totalPages = response.pagination.total_pages;
-          },
-          error: (error) => {
-            console.error('Hiba történt:', error);
-          },
-          complete: () => {
-            this.loading = false;
-          },
-        });
-    }
-  }
-
-  search(term: string) {
-    this.loading = true;
-    this.wealthService
-      .searchWealth(term, this.currentPage, this.pageSize)
-      .subscribe({
-        next: (response: PaginatedResponse<Wealth>) => {
-          this.wealthList = response.results;
-          this.totalItems = response.pagination.total;
-          this.totalPages = response.pagination.total_pages;
-        },
-        error: (error) => {
-          console.error('Hiba történt:', error);
-        },
-        complete: () => {
-          this.loading = false;
-        },
-      });
+    this.loadWealths();
   }
 
   onPageChange(page: number) {
@@ -164,11 +97,5 @@ export class WealthListComponent implements OnInit {
 
   calculateBalance(wealth: Wealth): number {
     return this.calculateSavings(wealth) - this.calculateDebts(wealth);
-  }
-
-  onFiltersChange(filters: WealthFilters) {
-    this.currentFilters = filters;
-    this.currentPage = 1;
-    this.loadWealths();
   }
 }
