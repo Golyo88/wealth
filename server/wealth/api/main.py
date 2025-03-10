@@ -94,7 +94,6 @@ async def get_wealths(
     order_direction: Optional[Literal["asc", "desc"]] = Query("asc"),
     db: Session = Depends(get_db),
 ):
-    print("\n=== DEBUG: Kezdés ===")
 
     pagination = PaginationParams(page=page, page_size=page_size)
 
@@ -128,9 +127,6 @@ async def get_wealths(
         .outerjoin(Liability)
         .group_by(Wealth.id)
     ).subquery()
-
-    print("\n=== DEBUG: Liabilities Query ===")
-    print(str(liabilities_sum))
 
     # Most készítsük el a fő subquery-t
     subquery = (
@@ -170,11 +166,6 @@ async def get_wealths(
         )
     ).subquery()
 
-    # Base query előtt nézzük meg a paramétereket
-    print("\n=== DEBUG: Szűrési paraméterek ===")
-    print(f"liabilities_amount: {liabilities_amount}")
-    print(f"liabilities_amount_op: {liabilities_amount_op}")
-
     # Base query definíció
     base_query = (
         db.query(
@@ -192,12 +183,6 @@ async def get_wealths(
         .select_from(Wealth)
         .join(subquery, Wealth.id == subquery.c.wealth_id)
     )
-
-    # Debug: nézzük meg a szűrés előtti értékeket
-    print("\n=== DEBUG: Értékek szűrés előtt ===")
-    debug_results = base_query.all()
-    for result in debug_results:
-        print(f"ID: {result[0].id}, Liabilities: {result[6]}")
 
     # Név szerinti szűrés
     if name:
@@ -247,11 +232,6 @@ async def get_wealths(
                 & (subquery.c.liabilities_amount > 0)
             )
 
-        # Debug: nézzük meg a szűrés utáni értékeket
-        print("\n=== DEBUG: Értékek szűrés után ===")
-        debug_results = base_query.all()
-        for result in debug_results:
-            print(f"ID: {result[0].id}, Liabilities: {result[6]}")
     if net_worth is not None and net_worth_op:
         base_query = apply_comparison(
             base_query,
@@ -311,16 +291,6 @@ async def get_wealths(
         .limit(pagination.page_size)
         .all()
     )
-
-    print("\n=== DEBUG: Végeredmény ===")
-    for wealth in results:
-        if wealth[0].liabilities:
-            for liability in wealth[0].liabilities:
-                print(
-                    f"ID: {wealth[0].id}, Liabilities: {liability.public_debt_huf}, {liability.bank_loans_huf}, {liability.private_loans_huf}"
-                )
-        else:
-            print(f"ID: {wealth[0].id}, Liabilities: 0")
 
     return {
         "results": [result[0].to_model() for result in results],
