@@ -168,7 +168,7 @@ class Wealth(Base):
                     ),
                 }
             ),
-            liabilities=LiabilitiesModel.model_validate(self.liabilities),
+            liabilities=LiabilitiesModel.model_validate(self.liabilities[0]),
             income=(
                 [IncomeItem.to_model(income) for income in self.income_items]
                 if self.income_items

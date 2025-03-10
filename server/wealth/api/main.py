@@ -7,7 +7,7 @@ from wealth.database.database import get_db
 from sqlalchemy.sql import text
 from wealth.database.init_db import init_db
 from contextlib import asynccontextmanager
-from sqlalchemy import desc, asc, func
+from sqlalchemy import desc, asc, func, distinct, case
 
 from wealth.database.models import (
     IncomeItem,
@@ -66,34 +66,20 @@ async def get_wealths(
     page: int = Query(1, ge=1),
     page_size: int = Query(10, ge=1, le=100),
     name: Optional[str] = Query(None, description="Név alapján szűrés"),
-    real_estates_count_op: Optional[Literal["eq", "gt", "lt"]] = Query(
-        None, description="Ingatlanok számának összehasonlító operátora"
-    ),
-    real_estates_count: Optional[int] = Query(None, description="Ingatlanok száma"),
-    vehicles_count_op: Optional[Literal["eq", "gt", "lt"]] = Query(
-        None, description="Járművek számának összehasonlító operátora"
-    ),
-    vehicles_count: Optional[int] = Query(None, description="Járművek száma"),
-    securities_count_op: Optional[Literal["eq", "gt", "lt"]] = Query(
-        None, description="Értékpapírok számának összehasonlító operátora"
-    ),
-    securities_count: Optional[int] = Query(None, description="Értékpapírok száma"),
-    income_count_op: Optional[Literal["eq", "gt", "lt"]] = Query(
-        None, description="Jövedelmek számának összehasonlító operátora"
-    ),
-    income_count: Optional[int] = Query(None, description="Jövedelmek száma"),
-    savings_amount_op: Optional[Literal["eq", "gt", "lt"]] = Query(
-        None, description="Megtakarítások összegének összehasonlító operátora"
-    ),
-    savings_amount: Optional[int] = Query(None, description="Megtakarítások összege"),
-    liabilities_amount_op: Optional[Literal["eq", "gt", "lt"]] = Query(
-        None, description="Tartozások összegének összehasonlító operátora"
-    ),
-    liabilities_amount: Optional[int] = Query(None, description="Tartozások összege"),
-    net_worth_op: Optional[Literal["eq", "gt", "lt"]] = Query(
-        None, description="Vagyon összegének összehasonlító operátora"
-    ),
-    net_worth: Optional[int] = Query(None, description="Vagyon összege"),
+    real_estates_count_op: Optional[Literal["eq", "gt", "lt"]] = Query(None),
+    real_estates_count: Optional[int] = Query(None),
+    vehicles_count_op: Optional[Literal["eq", "gt", "lt"]] = Query(None),
+    vehicles_count: Optional[int] = Query(None),
+    securities_count_op: Optional[Literal["eq", "gt", "lt"]] = Query(None),
+    securities_count: Optional[int] = Query(None),
+    income_count_op: Optional[Literal["eq", "gt", "lt"]] = Query(None),
+    income_count: Optional[int] = Query(None),
+    savings_amount_op: Optional[Literal["eq", "gt", "lt"]] = Query(None),
+    savings_amount: Optional[int] = Query(None),
+    liabilities_amount_op: Optional[Literal["eq", "gt", "lt"]] = Query(None),
+    liabilities_amount: Optional[int] = Query(None),
+    net_worth_op: Optional[Literal["eq", "gt", "lt"]] = Query(None),
+    net_worth: Optional[int] = Query(None),
     order_by: Optional[
         Literal[
             "real_estates_count",
@@ -104,174 +90,240 @@ async def get_wealths(
             "liabilities_amount",
             "net_worth",
         ]
-    ] = Query(None, description="Rendezés mező"),
-    order_direction: Optional[Literal["asc", "desc"]] = Query(
-        "asc", description="Rendezés iránya"
-    ),
+    ] = Query(None),
+    order_direction: Optional[Literal["asc", "desc"]] = Query("asc"),
     db: Session = Depends(get_db),
 ):
+    print("\n=== DEBUG: Kezdés ===")
+
     pagination = PaginationParams(page=page, page_size=page_size)
-    query = (
+
+    # Először készítsünk egy subquery-t az értékpapírok összegével
+    securities_sum = (
         db.query(
-            Wealth,
-            func.count(RealEstate.id).label("real_estates_count"),
-            func.count(Vehicle.id).label("vehicles_count"),
-            func.count(Security.id).label("securities_count"),
-            func.count(IncomeItem.id).label("income_count"),
-            (
-                func.coalesce(
-                    func.sum(
-                        Savings.deposit_huf
-                        + Savings.cash_huf
-                        + Savings.bank_balance_huf
-                        + Savings.bank_balance_foreign_currency * Savings.exchange_rate
-                    ),
-                    0,
-                )
-            ).label("savings_amount"),
-            (
-                func.coalesce(
-                    func.sum(
-                        Liability.public_debt_huf
-                        + Liability.bank_loans_huf
-                        + Liability.private_loans_huf
-                    ),
-                    0,
-                )
-            ).label("liabilities_amount"),
+            Wealth.id.label("wealth_id"),
+            func.coalesce(func.sum(Security.value_huf), 0).label("securities_sum"),
         )
+        .outerjoin(Security)
+        .group_by(Wealth.id)
+    ).subquery()
+
+    # Készítsünk egy subquery-t a tartozások összegével
+    liabilities_sum = (
+        db.query(
+            Wealth.id.label("wealth_id"),
+            func.sum(
+                case(
+                    (
+                        Liability.id.isnot(None),
+                        func.coalesce(Liability.public_debt_huf, 0)
+                        + func.coalesce(Liability.bank_loans_huf, 0)
+                        + func.coalesce(Liability.private_loans_huf, 0),
+                    ),
+                    else_=0,
+                )
+            ).label("liabilities_sum"),
+        )
+        .select_from(Wealth)
+        .outerjoin(Liability)
+        .group_by(Wealth.id)
+    ).subquery()
+
+    print("\n=== DEBUG: Liabilities Query ===")
+    print(str(liabilities_sum))
+
+    # Most készítsük el a fő subquery-t
+    subquery = (
+        db.query(
+            Wealth.id.label("wealth_id"),
+            func.count(distinct(RealEstate.id)).label("real_estates_count"),
+            func.count(distinct(Vehicle.id)).label("vehicles_count"),
+            func.count(distinct(Security.id)).label("securities_count"),
+            func.count(distinct(IncomeItem.id)).label("income_count"),
+            (
+                func.coalesce(Savings.deposit_huf, 0)
+                + func.coalesce(Savings.cash_huf, 0)
+                + func.coalesce(Savings.bank_balance_huf, 0)
+                + func.coalesce(Savings.bank_balance_foreign_currency, 0)
+                * func.coalesce(Savings.exchange_rate, 0)
+                + securities_sum.c.securities_sum
+            ).label("savings_amount"),
+            liabilities_sum.c.liabilities_sum.label("liabilities_amount"),
+        )
+        .select_from(Wealth)
         .outerjoin(RealEstate)
         .outerjoin(Vehicle)
         .outerjoin(Security)
         .outerjoin(IncomeItem)
         .outerjoin(Savings)
-        .outerjoin(Liability)
-        .group_by(Wealth.id)
+        .outerjoin(securities_sum, Wealth.id == securities_sum.c.wealth_id)
+        .outerjoin(liabilities_sum, Wealth.id == liabilities_sum.c.wealth_id)
+        .group_by(
+            Wealth.id,
+            Savings.deposit_huf,
+            Savings.cash_huf,
+            Savings.bank_balance_huf,
+            Savings.bank_balance_foreign_currency,
+            Savings.exchange_rate,
+            securities_sum.c.securities_sum,
+            liabilities_sum.c.liabilities_sum,
+        )
+    ).subquery()
+
+    # Base query előtt nézzük meg a paramétereket
+    print("\n=== DEBUG: Szűrési paraméterek ===")
+    print(f"liabilities_amount: {liabilities_amount}")
+    print(f"liabilities_amount_op: {liabilities_amount_op}")
+
+    # Base query definíció
+    base_query = (
+        db.query(
+            Wealth,
+            subquery.c.real_estates_count,
+            subquery.c.vehicles_count,
+            subquery.c.securities_count,
+            subquery.c.income_count,
+            subquery.c.savings_amount,
+            subquery.c.liabilities_amount,
+            (subquery.c.savings_amount - subquery.c.liabilities_amount).label(
+                "net_worth"
+            ),
+        )
+        .select_from(Wealth)
+        .join(subquery, Wealth.id == subquery.c.wealth_id)
     )
 
+    # Debug: nézzük meg a szűrés előtti értékeket
+    print("\n=== DEBUG: Értékek szűrés előtt ===")
+    debug_results = base_query.all()
+    for result in debug_results:
+        print(f"ID: {result[0].id}, Liabilities: {result[6]}")
+
+    # Név szerinti szűrés
     if name:
-        query = query.join(Person).filter(Person.name.ilike(f"%{name}%"))
+        base_query = base_query.join(Person).filter(Person.name.ilike(f"%{name}%"))
 
-    def add_filter(query, value, op, column):
-        if value is not None and op is not None:
-            if op == "eq":
-                return query.having(column == value)
-            elif op == "gt":
-                return query.having(column > value)
-            elif op == "lt":
-                return query.having(column < value)
-        return query
+    # Számosság szerinti szűrések
+    if real_estates_count is not None and real_estates_count_op:
+        base_query = apply_comparison(
+            base_query,
+            subquery.c.real_estates_count,
+            real_estates_count,
+            real_estates_count_op,
+        )
+    if vehicles_count is not None and vehicles_count_op:
+        base_query = apply_comparison(
+            base_query, subquery.c.vehicles_count, vehicles_count, vehicles_count_op
+        )
+    if securities_count is not None and securities_count_op:
+        base_query = apply_comparison(
+            base_query,
+            subquery.c.securities_count,
+            securities_count,
+            securities_count_op,
+        )
+    if income_count is not None and income_count_op:
+        base_query = apply_comparison(
+            base_query, subquery.c.income_count, income_count, income_count_op
+        )
+    if savings_amount is not None and savings_amount_op:
+        base_query = apply_comparison(
+            base_query, subquery.c.savings_amount, savings_amount, savings_amount_op
+        )
+    if liabilities_amount is not None and liabilities_amount_op:
+        if liabilities_amount_op == "gt":
+            base_query = base_query.filter(
+                (subquery.c.liabilities_amount > liabilities_amount)
+                & (subquery.c.liabilities_amount > 0)
+            )
+        elif liabilities_amount_op == "lt":
+            base_query = base_query.filter(
+                (subquery.c.liabilities_amount < liabilities_amount)
+                & (subquery.c.liabilities_amount > 0)
+            )
+        elif liabilities_amount_op == "eq":
+            base_query = base_query.filter(
+                (subquery.c.liabilities_amount == liabilities_amount)
+                & (subquery.c.liabilities_amount > 0)
+            )
 
-    query = add_filter(
-        query, real_estates_count, real_estates_count_op, func.count(RealEstate.id)
-    )
-    query = add_filter(query, vehicles_count, vehicles_count_op, func.count(Vehicle.id))
-    query = add_filter(
-        query, securities_count, securities_count_op, func.count(Security.id)
-    )
-    query = add_filter(query, income_count, income_count_op, func.count(IncomeItem.id))
-    query = add_filter(
-        query,
-        savings_amount,
-        savings_amount_op,
-        func.sum(
-            Savings.deposit_huf
-            + Savings.cash_huf
-            + Savings.bank_balance_huf
-            + Savings.bank_balance_foreign_currency * Savings.exchange_rate
-        ),
-    )
-    query = add_filter(
-        query,
-        liabilities_amount,
-        liabilities_amount_op,
-        func.sum(
-            Liability.public_debt_huf
-            + Liability.bank_loans_huf
-            + Liability.private_loans_huf
-        ),
-    )
-
-    if net_worth is not None and net_worth_op is not None:
-        net_worth_expr = func.coalesce(
-            func.sum(
-                Savings.deposit_huf
-                + Savings.cash_huf
-                + Savings.bank_balance_huf
-                + Savings.bank_balance_foreign_currency * Savings.exchange_rate
-            ),
-            0,
-        ) - func.coalesce(
-            func.sum(
-                Liability.public_debt_huf
-                + Liability.bank_loans_huf
-                + Liability.private_loans_huf
-            ),
-            0,
+        # Debug: nézzük meg a szűrés utáni értékeket
+        print("\n=== DEBUG: Értékek szűrés után ===")
+        debug_results = base_query.all()
+        for result in debug_results:
+            print(f"ID: {result[0].id}, Liabilities: {result[6]}")
+    if net_worth is not None and net_worth_op:
+        base_query = apply_comparison(
+            base_query,
+            subquery.c.savings_amount - subquery.c.liabilities_amount,
+            net_worth,
+            net_worth_op,
         )
 
-        if net_worth_op == "eq":
-            query = query.having(net_worth_expr == net_worth)
-        elif net_worth_op == "gt":
-            query = query.having(net_worth_expr > net_worth)
-        elif net_worth_op == "lt":
-            query = query.having(net_worth_expr < net_worth)
-
+    # Rendezés
     if order_by:
-        order_column = None
         if order_by == "real_estates_count":
-            order_column = func.count(RealEstate.id)
+            base_query = base_query.order_by(
+                asc(subquery.c.real_estates_count)
+                if order_direction == "asc"
+                else desc(subquery.c.real_estates_count)
+            )
         elif order_by == "vehicles_count":
-            order_column = func.count(Vehicle.id)
+            base_query = base_query.order_by(
+                asc(subquery.c.vehicles_count)
+                if order_direction == "asc"
+                else desc(subquery.c.vehicles_count)
+            )
         elif order_by == "securities_count":
-            order_column = func.count(Security.id)
+            base_query = base_query.order_by(
+                asc(subquery.c.securities_count)
+                if order_direction == "asc"
+                else desc(subquery.c.securities_count)
+            )
         elif order_by == "income_count":
-            order_column = func.count(IncomeItem.id)
+            base_query = base_query.order_by(
+                asc(subquery.c.income_count)
+                if order_direction == "asc"
+                else desc(subquery.c.income_count)
+            )
         elif order_by == "savings_amount":
-            order_column = func.sum(
-                Savings.deposit_huf
-                + Savings.cash_huf
-                + Savings.bank_balance_huf
-                + Savings.bank_balance_foreign_currency * Savings.exchange_rate
+            base_query = base_query.order_by(
+                asc(subquery.c.savings_amount)
+                if order_direction == "asc"
+                else desc(subquery.c.savings_amount)
             )
         elif order_by == "liabilities_amount":
-            order_column = func.sum(
-                Liability.public_debt_huf
-                + Liability.bank_loans_huf
-                + Liability.private_loans_huf
+            base_query = base_query.order_by(
+                asc(subquery.c.liabilities_amount)
+                if order_direction == "asc"
+                else desc(subquery.c.liabilities_amount)
             )
         elif order_by == "net_worth":
-            order_column = func.coalesce(
-                func.sum(
-                    Savings.deposit_huf
-                    + Savings.cash_huf
-                    + Savings.bank_balance_huf
-                    + Savings.bank_balance_foreign_currency * Savings.exchange_rate
-                ),
-                0,
-            ) - func.coalesce(
-                func.sum(
-                    Liability.public_debt_huf
-                    + Liability.bank_loans_huf
-                    + Liability.private_loans_huf
-                ),
-                0,
+            net_worth = subquery.c.savings_amount - subquery.c.liabilities_amount
+            base_query = base_query.order_by(
+                asc(net_worth) if order_direction == "asc" else desc(net_worth)
             )
 
-        if order_by:
-            query = query.order_by(
-                desc(order_column) if order_direction == "desc" else asc(order_column)
-            )
-
-    total = query.count()
-    query = query.offset((pagination.page - 1) * pagination.page_size).limit(
-        pagination.page_size
+    # Lapozás
+    total = base_query.count()
+    results = (
+        base_query.offset((pagination.page - 1) * pagination.page_size)
+        .limit(pagination.page_size)
+        .all()
     )
 
-    results = query.all()
+    print("\n=== DEBUG: Végeredmény ===")
+    for wealth in results:
+        if wealth[0].liabilities:
+            for liability in wealth[0].liabilities:
+                print(
+                    f"ID: {wealth[0].id}, Liabilities: {liability.public_debt_huf}, {liability.bank_loans_huf}, {liability.private_loans_huf}"
+                )
+        else:
+            print(f"ID: {wealth[0].id}, Liabilities: 0")
 
     return {
-        "results": [wealth[0].to_model() for wealth in results],
+        "results": [result[0].to_model() for result in results],
         "pagination": {
             "page": pagination.page,
             "page_size": pagination.page_size,
@@ -279,6 +331,16 @@ async def get_wealths(
             "total_pages": (total + pagination.page_size - 1) // pagination.page_size,
         },
     }
+
+
+def apply_comparison(query, column, value, op):
+    if op == "eq":
+        return query.filter(column == value)
+    elif op == "gt":
+        return query.filter(column > value)
+    elif op == "lt":
+        return query.filter(column < value)
+    return query
 
 
 @app.get("/api/wealths/{id}")
