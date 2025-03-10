@@ -1,0 +1,229 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "person": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string",
+          "enum": [
+            "országgyűlési képviselő",
+            "házas-/élettárs",
+            "gyermek"
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "role"
+      ]
+    },
+    "assets": {
+      "type": "object",
+      "properties": {
+        "real_estate": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "location": {
+                "type": "string"
+              },
+              "area_m2": {
+                "type": "integer"
+              },
+              "land_use": {
+                "type": "string"
+              },
+              "building_type": {
+                "type": "string"
+              },
+              "building_size_m2": {
+                "type": "integer",
+                "nullable": true
+              },
+              "legal_status": {
+                "type": "string"
+              },
+              "ownership_status": {
+                "type": "string"
+              },
+              "ownership_share": {
+                "type": "string"
+              },
+              "acquisition_mode": {
+                "type": "string"
+              },
+              "acquisition_date": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "location",
+              "area_m2",
+              "land_use",
+              "ownership_status",
+              "ownership_share",
+              "acquisition_mode",
+              "acquisition_date"
+            ]
+          }
+        },
+        "vehicles": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string"
+              },
+              "brand_model": {
+                "type": "string"
+              },
+              "acquisition_year": {
+                "type": "integer"
+              },
+              "acquisition_mode": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "type",
+              "brand_model",
+              "acquisition_year",
+              "acquisition_mode"
+            ]
+          }
+        },
+        "securities": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string"
+              },
+              "value_huf": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "type",
+              "value_huf"
+            ]
+          }
+        },
+        "savings": {
+          "type": "object",
+          "properties": {
+            "deposit_huf": {
+              "type": "integer"
+            },
+            "cash_huf": {
+              "type": "integer"
+            },
+            "bank_balance_huf": {
+              "type": "integer"
+            },
+            "bank_balance_foreign_currency": {
+              "type": "integer",
+              "nullable": true
+            },
+            "exchange_rate": {
+              "type": "number",
+              "nullable": true
+            }
+          }
+        }
+      }
+    },
+    "liabilities": {
+      "type": "object",
+      "properties": {
+        "public_debt_huf": {
+          "type": "integer",
+          "nullable": true
+        },
+        "bank_loans_huf": {
+          "type": "integer",
+          "nullable": true
+        },
+        "private_loans_huf": {
+          "type": "integer",
+          "nullable": true
+        }
+      }
+    },
+    "income": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "position": {
+            "type": "string"
+          },
+          "income_category": {
+            "type": "string",
+            "enum": [
+              "díjazás nélküli",
+              "1",
+              "2",
+              "3",
+              "4",
+              "5"
+            ]
+          }
+        },
+        "required": [
+          "position",
+          "income_category"
+        ]
+      }
+    },
+    "economic_interests": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "organization": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "ownership_percentage": {
+            "type": "string",
+            "nullable": true
+          },
+          "income_category": {
+            "type": "string",
+            "enum": [
+              "díjazás nélküli",
+              "1",
+              "2",
+              "3",
+              "4",
+              "5"
+            ]
+          }
+        },
+        "required": [
+          "organization",
+          "role",
+          "income_category"
+        ]
+      }
+    }
+  },
+  "required": [
+    "person",
+    "assets",
+    "liabilities",
+    "income",
+    "economic_interests"
+  ]
+}

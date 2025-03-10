@@ -1,0 +1,52 @@
+version: "3"
+
+services:
+  postgres:
+    image: postgres:17
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 12345678
+      POSTGRES_DB: wealth
+    networks:
+      - wealth-network
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-scripts:/docker-entrypoint-initdb.d
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d wealth"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  server:
+    build: 
+      context: ./server
+      dockerfile: Dockerfile
+    environment:
+      POSTGRES_URL: postgresql://postgres:12345678@postgres/wealth
+    depends_on:
+      - postgres
+    ports:
+      - "8000:8000"
+    networks:
+      - wealth-network
+
+  app:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - server
+    networks:
+      - wealth-network
+
+networks:
+  wealth-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
