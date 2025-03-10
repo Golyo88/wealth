@@ -1,0 +1,61 @@
+<div class="card mb-4">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <h5 class="mb-0">Szűrők</h5>
+    <button class="btn btn-outline-secondary btn-sm" (click)="toggleFilters()">
+      {{ isExpanded ? 'Bezárás' : 'Megnyitás' }}
+    </button>
+  </div>
+  <div class="card-body" *ngIf="isExpanded">
+    <!-- Név szűrő -->
+    <div class="row mb-3">
+      <div class="col-md-12">
+        <label class="form-label">Név</label>
+        <input type="text" class="form-control" [(ngModel)]="filters.name" placeholder="Szűrés név alapján...">
+      </div>
+    </div>
+
+    <!-- Számláló szűrők -->
+    <div class="row">
+      <div class="col-md-3 mb-3" *ngFor="let counter of counters">
+        <label class="form-label">{{ counter.label }}</label>
+        <div class="input-group">
+          <select class="form-select" [(ngModel)]="filters[counter.opKey]">
+            <option value="">-</option>
+            <option value="eq">=</option>
+            <option value="gt">&gt;</option>
+            <option value="lt">&lt;</option>
+          </select>
+          <input type="number" class="form-control" [(ngModel)]="filters[counter.valueKey]">
+        </div>
+      </div>
+
+      <!-- Rendezés -->
+      <div class="col-md-3 mb-3">
+        <label class="form-label">Rendezés</label>
+        <select class="form-select" [(ngModel)]="filters.order_by">
+          <option value="">-</option>
+          <option value="real_estates_count">Ingatlanok száma</option>
+          <option value="vehicles_count">Járművek száma</option>
+          <option value="securities_count">Értékpapírok száma</option>
+          <option value="income_count">Jövedelmek száma</option>
+          <option value="savings_amount">Megtakarítások</option>
+          <option value="liabilities_amount">Tartozások</option>
+          <option value="net_worth">Egyenleg</option>
+        </select>
+      </div>
+
+      <div class="col-md-3 mb-3">
+        <label class="form-label">Rendezés iránya</label>
+        <select class="form-select" [(ngModel)]="filters.order_direction">
+          <option value="asc">Növekvő</option>
+          <option value="desc">Csökkenő</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="text-end mt-3">
+      <button class="btn btn-primary" (click)="applyFilters()">Szűrés</button>
+      <button class="btn btn-secondary ms-2" (click)="resetFilters()">Alaphelyzet</button>
+    </div>
+  </div>
+</div>

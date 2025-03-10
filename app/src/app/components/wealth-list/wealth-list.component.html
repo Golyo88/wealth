@@ -1,0 +1,102 @@
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-12">
+      <div class="search-container mb-4">
+        <div class="input-group">
+          <input 
+            type="text" 
+            class="form-control"
+            placeholder="Kérdezz az AI asszisztenstől..."
+            [(ngModel)]="searchInput"
+            (keyup.enter)="onSearch(searchInput)"
+          >
+          <span class="input-group-text">
+            <i class="bi bi-robot"></i>
+          </span>
+        </div>
+        <small class="text-muted mt-2">
+          <i class="bi bi-info-circle"></i>
+          Tegye fel kérdését az AI asszisztensnek, majd nyomjon Enter-t
+        </small>
+      </div>
+
+      <!-- Szűrők -->
+      <app-wealth-filter (filterChange)="onFiltersChange($event)"></app-wealth-filter>
+
+      <div *ngIf="loading" class="text-center">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Betöltés...</span>
+        </div>
+      </div>
+
+      <div class="wealth-list">
+        <div *ngFor="let wealth of wealthList" class="card mb-3 wealth-card">
+          <div class="card-body">
+            <h5 class="card-title">{{ wealth.person.name }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">{{ wealth.person.role }}</h6>
+            
+            <div class="row mt-3">
+              <div class="col-md-3">
+                <strong>Ingatlanok:</strong> {{ wealth.assets.real_estate?.length || 0 }} db
+              </div>
+              <div class="col-md-3">
+                <strong>Járművek:</strong> {{ wealth.assets.vehicles?.length || 0 }} db
+              </div>
+              <div class="col-md-3">
+                <strong>Értékpapírok:</strong> {{ wealth.assets.securities?.length || 0 }} db
+              </div>
+              <div class="col-md-3">
+                <strong>Jövedelmek:</strong> {{ wealth.income?.length || 0 }} db
+              </div>
+            </div>
+
+            <div class="row mt-3">
+              <div class="col-md-3">
+                <strong>Megtakarítások:</strong> {{ calculateSavings(wealth) | number:'1.0-0' }} Ft
+              </div>
+              <div class="col-md-3">
+                <strong>Tartozások:</strong> {{ calculateDebts(wealth) | number:'1.0-0' }} Ft
+              </div>
+              <div class="col-md-3">
+                <strong>Egyenleg:</strong> 
+                <span [class.text-success]="calculateBalance(wealth) > 0" 
+                      [class.text-danger]="calculateBalance(wealth) < 0">
+                  {{ calculateBalance(wealth) | number:'1.0-0' }} Ft
+                </span>
+              </div>
+              <div class="col-md-3 text-end">
+                <button 
+                  class="btn btn-outline-primary"
+                  [routerLink]="['/wealth', wealth.id]"
+                >
+                  Részletek
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <nav *ngIf="totalPages > 1" aria-label="Page navigation" class="mt-4">
+        <ul class="pagination justify-content-center">
+          <li class="page-item" [class.disabled]="currentPage === 1">
+            <a class="page-link" (click)="onPageChange(currentPage - 1)" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+          
+          <li class="page-item" *ngFor="let page of [].constructor(totalPages); let i = index" 
+              [class.active]="currentPage === i + 1">
+            <a class="page-link" (click)="onPageChange(i + 1)">{{ i + 1 }}</a>
+          </li>
+          
+          <li class="page-item" [class.disabled]="currentPage === totalPages">
+            <a class="page-link" (click)="onPageChange(currentPage + 1)" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div> 

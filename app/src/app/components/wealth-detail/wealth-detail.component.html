@@ -1,0 +1,176 @@
+<div class="container mt-4" *ngIf="wealth">
+  <div class="row">
+    <div class="col-12">
+      <div class="card mb-4">
+        <div class="card-body">
+          <h2 class="card-title">{{ wealth.person.name }}</h2>
+          <h5 class="card-subtitle mb-3 text-muted">{{ wealth.person.role }}</h5>
+          <button class="btn btn-outline-primary" routerLink="/wealth">
+            <i class="bi bi-arrow-left"></i> Vissza a listához
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ingatlanok -->
+  <div class="card mb-4" *ngIf="wealth.assets.real_estate?.length">
+    <div class="card-header">
+      <h3>Ingatlanok</h3>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Helyszín</th>
+              <th>Terület (m²)</th>
+              <th>Tulajdoni hányad</th>
+              <th>Szerzés módja</th>
+              <th>Szerzés ideje</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let estate of wealth.assets.real_estate">
+              <td>{{ estate.location }}</td>
+              <td>{{ estate.area_m2 }}</td>
+              <td>{{ estate.ownership_share }}</td>
+              <td>{{ estate.acquisition_mode }}</td>
+              <td>{{ estate.acquisition_date }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Járművek -->
+  <div class="card mb-4" *ngIf="wealth.assets.vehicles?.length">
+    <div class="card-header">
+      <h3>Járművek</h3>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Típus</th>
+              <th>Márka/Modell</th>
+              <th>Szerzés éve</th>
+              <th>Szerzés módja</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let vehicle of wealth.assets.vehicles">
+              <td>{{ vehicle.type }}</td>
+              <td>{{ vehicle.brand_model }}</td>
+              <td>{{ vehicle.acquisition_year }}</td>
+              <td>{{ vehicle.acquisition_mode }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Értékpapírok -->
+  <div class="card mb-4" *ngIf="wealth.assets.securities?.length">
+    <div class="card-header">
+      <h3>Értékpapírok</h3>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Típus</th>
+              <th>Érték (HUF)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let security of wealth.assets.securities">
+              <td>{{ security.type }}</td>
+              <td>{{ security.value_huf | number }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Megtakarítások -->
+  <div class="card mb-4" *ngIf="wealth.assets.savings">
+    <div class="card-header">
+      <h3>Megtakarítások</h3>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-6" *ngIf="wealth.assets.savings.deposit_huf">
+          <p><strong>Betét (HUF):</strong> {{ wealth.assets.savings.deposit_huf | number }}</p>
+        </div>
+        <div class="col-md-6" *ngIf="wealth.assets.savings.cash_huf">
+          <p><strong>Készpénz (HUF):</strong> {{ wealth.assets.savings.cash_huf | number }}</p>
+        </div>
+        <div class="col-md-6" *ngIf="wealth.assets.savings.bank_balance_huf">
+          <p><strong>Bankszámla egyenleg (HUF):</strong> {{ wealth.assets.savings.bank_balance_huf | number }}</p>
+        </div>
+        <div class="col-md-6" *ngIf="wealth.assets.savings.bank_balance_foreign_currency">
+          <p><strong>Deviza egyenleg:</strong> {{ wealth.assets.savings.bank_balance_foreign_currency | number }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tartozások -->
+  <div class="card mb-4" *ngIf="wealth.liabilities">
+    <div class="card-header">
+      <h3>Tartozások</h3>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-4" *ngIf="wealth.liabilities.public_debt_huf">
+          <p><strong>Köztartozás (HUF):</strong> {{ wealth.liabilities.public_debt_huf | number }}</p>
+        </div>
+        <div class="col-md-4" *ngIf="wealth.liabilities.bank_loans_huf">
+          <p><strong>Bankhitel (HUF):</strong> {{ wealth.liabilities.bank_loans_huf | number }}</p>
+        </div>
+        <div class="col-md-4" *ngIf="wealth.liabilities.private_loans_huf">
+          <p><strong>Magánkölcsön (HUF):</strong> {{ wealth.liabilities.private_loans_huf | number }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Jövedelmek -->
+  <div class="card mb-4" *ngIf="wealth.income?.length">
+    <div class="card-header">
+      <h3>Jövedelmek</h3>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Pozíció</th>
+              <th>Jövedelem kategória</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let income of wealth.income">
+              <td>{{ income.position }}</td>
+              <td>{{ income.income_category }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container mt-4" *ngIf="loading">
+  <div class="text-center">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Betöltés...</span>
+    </div>
+  </div>
+</div> 

@@ -1,0 +1,55 @@
+.search-container {
+  max-width: 600px;
+  margin: 0 auto;
+  
+  .input-group {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    
+    .form-control {
+      border-right: none;
+      &:focus {
+        box-shadow: none;
+      }
+    }
+    
+    .input-group-text {
+      background: white;
+      border-left: none;
+    }
+  }
+}
+
+.wealth-card {
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+  
+  .card-title {
+    color: #2c3e50;
+    font-weight: 600;
+  }
+  
+  .card-subtitle {
+    color: #7f8c8d;
+  }
+}
+
+.pagination {
+  .page-link {
+    cursor: pointer;
+    color: #3498db;
+    
+    &:focus {
+      box-shadow: none;
+    }
+  }
+  
+  .active .page-link {
+    background-color: #3498db;
+    border-color: #3498db;
+  }
+} 
