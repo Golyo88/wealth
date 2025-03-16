@@ -41,7 +41,7 @@ export interface WatercraftOrAircraft {
 }
 
 export interface Vehicles {
-  motor_vehicles?: MotorVehicle[];
+  motor_vehicle?: MotorVehicle[];
   watercraft_or_aircraft?: WatercraftOrAircraft[];
 }
 
