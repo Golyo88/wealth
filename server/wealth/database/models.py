@@ -106,8 +106,8 @@ class Artwork(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
     quantity = Column(Integer, nullable=False)
-    acquisition_year = Column(Integer, nullable=False)
-    acquisition_mode = Column(String, nullable=False)
+    acquisition_year = Column(Integer)
+    acquisition_mode = Column(String)
 
     person_id = Column(Integer, ForeignKey("persons.id"), nullable=False)
     person = relationship("Person", back_populates="artworks")
@@ -131,8 +131,8 @@ class OtherAsset(Base):
 
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
-    acquisition_year = Column(Integer, nullable=False)
-    acquisition_mode = Column(String, nullable=False)
+    acquisition_year = Column(Integer)
+    acquisition_mode = Column(String)
 
     person_id = Column(Integer, ForeignKey("persons.id"), nullable=False)
     person = relationship("Person", back_populates="other_assets")
