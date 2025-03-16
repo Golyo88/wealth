@@ -274,7 +274,7 @@
           <h3>Követelések</h3>
         </div>
         <div class="card-body">
-          <div *ngIf="wealth.assets?.claims?.bank_deposit_claim?.length">
+          <div *ngIf="wealth.assets?.claims?.bank_deposit_claims?.length">
             <h4>Hitelintézeti számlakövetelés</h4>
             <div class="table-responsive">
               <table class="table">
@@ -286,7 +286,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let claim of wealth.assets?.claims?.bank_deposit_claim">
+                  <tr *ngFor="let claim of wealth.assets?.claims?.bank_deposit_claims">
                     <td>{{ claim.value_huf | number }}</td>
                     <td>{{ claim.foreign_currency_value_in_huf | number }}</td>
                     <td>{{ claim.exchange_rate | number }}</td>
