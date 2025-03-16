@@ -75,17 +75,22 @@ class WealthView(Wealth):
                 savings_deposit.value_huf for savings_deposit in person.savings_deposits
             )
             + sum(security.value_huf for security in person.securities)
+            + sum(
+                (
+                    bank_deposit_claim.value_huf
+                    if bank_deposit_claim.value_huf is not None
+                    else bank_deposit_claim.foreign_currency_value_in_huf
+                )
+                for bank_deposit_claim in person.bank_deposit_claims
+            )
+            + sum((other_claim.value_huf) for other_claim in person.other_claims)
         )
-        +sum(
-            bank_deposit_claim.value_huf
-            for bank_deposit_claim in person.bank_deposit_claims
-        )
-        +sum(other_claim.value_huf for other_claim in person.other_claims)
 
-        total_liabilities = sum(
-            bank_loan.value_huf for bank_loan in person.bank_loans
-        ) + sum(private_loan.value_huf for private_loan in person.private_loans)
-        +sum(public_debt.value_huf for public_debt in person.public_debts)
+        total_liabilities = (
+            sum(bank_loan.value_huf for bank_loan in person.bank_loans)
+            + sum(private_loan.value_huf for private_loan in person.private_loans)
+            + sum(public_debt.value_huf for public_debt in person.public_debts)
+        )
 
         net_worth = total_savings - total_liabilities
 
