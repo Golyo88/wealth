@@ -111,8 +111,8 @@ export interface Assets {
   artworks?: Artworks;
   other_assets?: OtherAssets[];
   securities?: Security[];
-  savings_deposit?: SavingsDeposit;
-  cash?: Cash;
+  savings_deposit?: SavingsDeposit[];
+  cash?: Cash[];
   claims?: Claims;
   other_property?: OtherProperty[];
 }
