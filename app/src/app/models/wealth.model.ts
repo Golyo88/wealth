@@ -173,8 +173,8 @@ export interface HighValueOccasionalIncomeItem {
 
 export interface Income {
   past_roles_and_affiliations?: PastRolesAndAffiliations[];
-  ongoing_income_generating_activity?: OngoingIncomeGeneratingActivity[];
-  high_value_occasional_income_item?: HighValueOccasionalIncomeItem[];
+  ongoing_income_generating_activities?: OngoingIncomeGeneratingActivity[];
+  high_value_occasional_income?: HighValueOccasionalIncomeItem[];
 }
 
 export interface OngoingCorporateAndTrustAffiliation {
@@ -191,8 +191,8 @@ export interface PoliticallyRelevantAndControllingBusinessInterest {
 }
 
 export interface EconomicInterests {
-  ongoing_corporate_and_trust_affiliation?: OngoingCorporateAndTrustAffiliation[];
-  politically_relevant_and_controlling_business_interest?: PoliticallyRelevantAndControllingBusinessInterest[];
+  ongoing_corporate_and_trust_affiliations?: OngoingCorporateAndTrustAffiliation[];
+  politically_relevant_and_controlling_business_interests?: PoliticallyRelevantAndControllingBusinessInterest[];
 }
 
 export interface Wealth {

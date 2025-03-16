@@ -259,19 +259,17 @@
         <div class="card-body">
           <div class="row">
             <div class="col-md-6" *ngFor="let savings of wealth.assets.savings_deposit">
-              <p><strong>Betét (HUF):</strong> {{ savings.value_huf | number }}</p>
+              <p *ngIf="savings.value_huf"><strong>Betét (HUF):</strong> {{ savings.value_huf | number }}</p>
             </div>
             <div class="col-md-6" *ngFor="let cash of wealth.assets.cash">
-              <p><strong>Készpénz (HUF):</strong> {{ cash.value_huf | number }}</p>
+              <p *ngIf="cash.value_huf"><strong>Készpénz (HUF):</strong> {{ cash.value_huf | number }}</p>
             </div>
             <div class="col-md-6" *ngFor="let claim of wealth.assets.claims?.bank_deposit_claims">
               <p *ngIf="claim.value_huf"><strong>Hitelintézeti számlakövetelés (HUF):</strong> {{ claim.value_huf | number }}</p>
               <p *ngIf="claim.foreign_currency_value_in_huf"><strong>Hitelintézeti számlakövetelés (devizában):</strong> {{ claim.foreign_currency_value_in_huf | number }}</p>
-              <p *ngIf="claim.exchange_rate"><strong>Árfolyam:</strong> {{ claim.exchange_rate | number }}</p>
             </div>
             <div class="col-md-6" *ngFor="let claim of wealth.assets.claims?.other_claims">
               <p *ngIf="claim.value_huf"><strong>Egyéb követelés (HUF):</strong> {{ claim.value_huf | number }}</p>
-              <p *ngIf="claim.exchange_rate"><strong>Árfolyam:</strong> {{ claim.exchange_rate | number }}</p>
             </div>
           </div>
         </div>
@@ -402,7 +400,7 @@
           </div>
 
           <!-- Folyamatban lévő jövedelemszerző tevékenységek -->
-          <div *ngIf="wealth.income.ongoing_income_generating_activity?.length" class="mt-4">
+          <div *ngIf="wealth.income.ongoing_income_generating_activities?.length" class="mt-4">
             <h4>Folyamatban lévő jövedelemszerző tevékenységek</h4>
             <div class="table-responsive">
               <table class="table">
@@ -413,7 +411,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let activity of wealth.income.ongoing_income_generating_activity">
+                  <tr *ngFor="let activity of wealth.income.ongoing_income_generating_activities">
                     <td>{{ activity.name }}</td>
                     <td>{{ activity.income_category }}</td>
                   </tr>
@@ -423,7 +421,7 @@
           </div>
 
           <!-- Alkalmi nagy értékű jövedelmek -->
-          <div *ngIf="wealth.income.high_value_occasional_income_item?.length" class="mt-4">
+          <div *ngIf="wealth.income.high_value_occasional_income?.length" class="mt-4">
             <h4>Alkalmi nagy értékű jövedelmek</h4>
             <div class="table-responsive">
               <table class="table">
@@ -434,7 +432,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let income of wealth.income.high_value_occasional_income_item">
+                  <tr *ngFor="let income of wealth.income.high_value_occasional_income">
                     <td>{{ income.name }}</td>
                     <td>{{ income.income_category }}</td>
                   </tr>
@@ -452,7 +450,7 @@
         </div>
         <div class="card-body">
           <!-- Folyamatban lévő vállalati és bizalmi kapcsolatok -->
-          <div *ngIf="wealth.economic_interests.ongoing_corporate_and_trust_affiliation?.length">
+          <div *ngIf="wealth.economic_interests.ongoing_corporate_and_trust_affiliations?.length">
             <h4>Folyamatban lévő vállalati és bizalmi kapcsolatok</h4>
             <div class="table-responsive">
               <table class="table">
@@ -464,7 +462,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let affiliation of wealth.economic_interests.ongoing_corporate_and_trust_affiliation">
+                  <tr *ngFor="let affiliation of wealth.economic_interests.ongoing_corporate_and_trust_affiliations">
                     <td>{{ affiliation.organization }}</td>
                     <td>{{ affiliation.role }}</td>
                     <td>{{ affiliation.income_category }}</td>
@@ -475,7 +473,7 @@
           </div>
 
           <!-- Politikailag releváns és irányító üzleti érdekeltségek -->
-          <div *ngIf="wealth.economic_interests.politically_relevant_and_controlling_business_interest" class="mt-4">
+          <div *ngIf="wealth.economic_interests.politically_relevant_and_controlling_business_interests?.length" class="mt-4">
             <h4></h4>
             <div class="table-responsive">
               <table class="table">
@@ -488,7 +486,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let interest of wealth.economic_interests.politically_relevant_and_controlling_business_interest">
+                  <tr *ngFor="let interest of wealth.economic_interests.politically_relevant_and_controlling_business_interests">
                     <td>{{ interest.organization }}</td>
                     <td>{{ interest.role }}</td>
                     <td>{{ interest.ownership_percentage }}</td>
