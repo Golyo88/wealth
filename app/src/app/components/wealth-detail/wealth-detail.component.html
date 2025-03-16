@@ -90,7 +90,7 @@
         </div>
         <div class="card-body">
           <!-- Gépjárművek -->
-          <div *ngIf="wealth.assets.vehicles?.motor_vehicles?.length">
+          <div *ngIf="wealth.assets.vehicles?.motor_vehicle?.length">
             <h4>Gépjárművek</h4>
             <div class="table-responsive">
               <table class="table">
@@ -103,7 +103,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let vehicle of wealth.assets.vehicles?.motor_vehicles">
+                  <tr *ngFor="let vehicle of wealth.assets.vehicles?.motor_vehicle">
                     <td>{{ vehicle.type }}</td>
                     <td>{{ vehicle.brand_model }}</td>
                     <td>{{ vehicle.acquisition_year }}</td>
