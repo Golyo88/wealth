@@ -5,6 +5,7 @@ import {
   PaginatedResponse,
   Security,
   WealthFilters,
+  WealthView,
 } from '../../models/wealth.model';
 import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 import { CommonModule } from '@angular/common';
@@ -28,7 +29,7 @@ import { WealthFilterComponent } from '../wealth-filter/wealth-filter.component'
   styleUrls: ['./wealth-list.component.scss'],
 })
 export class WealthListComponent implements OnInit {
-  wealthList: Wealth[] = [];
+  wealthList: WealthView[] = [];
   loading = false;
   currentPage = 1;
   pageSize = 10;
@@ -70,32 +71,5 @@ export class WealthListComponent implements OnInit {
   onPageChange(page: number) {
     this.currentPage = page;
     this.loadWealths();
-  }
-
-  calculateSavings(wealth: Wealth): number {
-    // Sum the bank_balance_huf and cash_huf Plust the foreign currency * the exchange rate
-    return (
-      (wealth.assets.securities?.reduce(
-        (sum: number, security: Security) => sum + (security.value_huf || 0),
-        0
-      ) || 0) +
-      (wealth.assets.savings?.deposit_huf || 0) +
-      (wealth.assets.savings?.bank_balance_huf || 0) +
-      (wealth.assets.savings?.cash_huf || 0) +
-      (wealth.assets.savings?.bank_balance_foreign_currency || 0) *
-        (wealth.assets.savings?.exchange_rate || 0)
-    );
-  }
-
-  calculateDebts(wealth: Wealth): number {
-    return (
-      (wealth.liabilities?.public_debt_huf || 0) +
-      (wealth.liabilities?.bank_loans_huf || 0) +
-      (wealth.liabilities?.private_loans_huf || 0)
-    );
-  }
-
-  calculateBalance(wealth: Wealth): number {
-    return this.calculateSavings(wealth) - this.calculateDebts(wealth);
   }
 }

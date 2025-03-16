@@ -60,12 +60,8 @@ class PDFProcessor:
             }
 
     async def process_pdfs(
-        self, pdf_directory: str, output_dir: str, max_concurrent: int = 3
+        self, pdf_dir: Path, output_dir: Path, max_concurrent: int = 3
     ) -> AsyncGenerator[Result, None]:
-        pdf_dir = Path(pdf_directory)
-        output_dir = Path(output_dir)
-        output_dir.mkdir(exist_ok=True)
-
         processed_files = self.get_processed_files(output_dir)
         pdf_files = [
             pdf for pdf in pdf_dir.glob("*.pdf") if pdf.stem not in processed_files

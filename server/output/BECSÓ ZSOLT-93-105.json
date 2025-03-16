@@ -1,1 +1,229 @@
-{"person":{"name":"BECSÓ ZSOLT","role":"országgyűlési képviselő"},"assets":{"real_estate":[{"location":"PÁSZTÓ","area_m2":29,"land_use":"-----","building_type":"lakóház","building_size_m2":null,"legal_status":"társasház","ownership_status":"tulajdonos","ownership_share":"-----","acquisition_mode":"vétel","acquisition_date":"1994.XII.11"},{"location":"SALGÓTARJÁN","area_m2":95,"land_use":"-----","building_type":"lakóház","building_size_m2":null,"legal_status":"társasház","ownership_status":"tulajdonos","ownership_share":"1/2","acquisition_mode":"vétel","acquisition_date":"2000.III.03"},{"location":"SALGÓTARJÁN","area_m2":18,"land_use":"-----","building_type":"-----","building_size_m2":null,"legal_status":"garázs","ownership_status":"-----","ownership_share":"1/2","acquisition_mode":"vétel","acquisition_date":"2000.III.03"},{"location":"RÉVFÜLÖP","area_m2":527,"land_use":"-----","building_type":"üdülő","building_size_m2":160,"legal_status":"családi ház","ownership_status":"tulajdonos","ownership_share":"1/2","acquisition_mode":"vétel","acquisition_date":"2014.V.16"},{"location":"BUDAPEST II. Kerület","area_m2":93,"land_use":"-----","building_type":"lakóház","building_size_m2":null,"legal_status":"társasház","ownership_status":"tulajdonos","ownership_share":"1/2","acquisition_mode":"vétel","acquisition_date":"2020"},{"location":"PÁSZTÓ","area_m2":454,"land_use":"-----","building_type":"lakóház","building_size_m2":150,"legal_status":"-----","ownership_status":"tulajdonos","ownership_share":"1/4","acquisition_mode":"öröklés","acquisition_date":"2015.IV.20"},{"location":"PÁSZTÓ","area_m2":945,"land_use":"-----","building_type":"üdülő","building_size_m2":80,"legal_status":"-----","ownership_status":"tulajdonos","ownership_share":"1/6","acquisition_mode":"öröklés","acquisition_date":"2015.IV.20"},{"location":"PÁSZTÓ","area_m2":1308,"land_use":"szőlő","building_type":"-----","building_size_m2":null,"legal_status":"-----","ownership_status":"tulajdonos","ownership_share":"-----","acquisition_mode":"vétel","acquisition_date":"2009, 2016"},{"location":"PÁSZTÓ","area_m2":814,"land_use":"beépítetlen terület","building_type":"-----","building_size_m2":null,"legal_status":"-----","ownership_status":"tulajdonos","ownership_share":"1/2","acquisition_mode":"vétel","acquisition_date":"2010"}],"vehicles":null,"securities":[{"type":"ÉRTÉKPAPÍR","value_huf":58188},{"type":"RÉSZVÉNY","value_huf":1008}],"savings":{"deposit_huf":15926,"cash_huf":639000,"bank_balance_huf":null,"bank_balance_foreign_currency":null,"exchange_rate":395.88}},"liabilities":{"public_debt_huf":null,"bank_loans_huf":null,"private_loans_huf":15000},"income":[{"position":"országgyűlési képviselő","income_category":"5"},{"position":"ARA-COELI KFT TULAJDONOS","income_category":"1"},{"position":"UBLOT KFT TULAJDONOS","income_category":"1"},{"position":"GÖRBEORSZÁG TURISZTIKAI EGYESÜLET, ELNÖK","income_category":"1"},{"position":"NEOGRADIENSIS RÉGIÓ EGYESÜLET, ELNÖK","income_category":"1"},{"position":"POLGÁRI SALGÓTARJÁNÉRT ALAPÍTVÁNY, ALAPÍTÓ","income_category":"1"},{"position":"POLGÁRI PÁSZTÓÉRT ALAPÍTVÁNY, ALAPÍTÓ","income_category":"1"},{"position":"POLGÁRI BÁTONYTERENYÉÉRT ALAPÍTVÁNY, ALAPÍTÓ","income_category":"1"}],"economic_interests":[{"organization":"ARA-COELI KFT","role":"tulajdonos","ownership_percentage":null,"income_category":"1"}]}
+{
+  "person": {
+    "name": "BECSÓ ZSOLT",
+    "role": "országgyűlési képviselő"
+  },
+  "assets": {
+    "real_estate": [
+      {
+        "location": "PÁSZTÓ",
+        "area_m2": 29,
+        "land_use": "-----",
+        "building_type": "lakóház",
+        "building_size_m2": null,
+        "legal_status": "társasház",
+        "ownership_status": "tulajdonos",
+        "ownership_share": "-----",
+        "acquisition_mode": "vétel",
+        "acquisition_date": "1994.XII.11"
+      },
+      {
+        "location": "SALGÓTARJÁN",
+        "area_m2": 95,
+        "land_use": "-----",
+        "building_type": "lakóház",
+        "building_size_m2": null,
+        "legal_status": "társasház",
+        "ownership_status": "tulajdonos",
+        "ownership_share": "1/2",
+        "acquisition_mode": "vétel",
+        "acquisition_date": "2000.III.03"
+      },
+      {
+        "location": "SALGÓTARJÁN",
+        "area_m2": 18,
+        "land_use": "-----",
+        "building_type": null,
+        "building_size_m2": null,
+        "legal_status": "garázs",
+        "ownership_status": "-----",
+        "ownership_share": "1/2",
+        "acquisition_mode": "vétel",
+        "acquisition_date": "2000.III.03"
+      },
+      {
+        "location": "RÉVFÜLÖP",
+        "area_m2": 527,
+        "land_use": "-----",
+        "building_type": "üdülő",
+        "building_size_m2": 160,
+        "legal_status": "családi ház",
+        "ownership_status": "tulajdonos",
+        "ownership_share": "1/2",
+        "acquisition_mode": "vétel",
+        "acquisition_date": "2014.V.16"
+      },
+      {
+        "location": "BUDAPEST II. Kerület",
+        "area_m2": 93,
+        "land_use": "-----",
+        "building_type": "lakóház",
+        "building_size_m2": null,
+        "legal_status": "társasház",
+        "ownership_status": "tulajdonos",
+        "ownership_share": "1/2",
+        "acquisition_mode": "vétel",
+        "acquisition_date": "2020"
+      },
+      {
+        "location": "PÁSZTÓ",
+        "area_m2": 454,
+        "land_use": "-----",
+        "building_type": "lakóház",
+        "building_size_m2": 150,
+        "legal_status": "-----",
+        "ownership_status": "tulajdonos",
+        "ownership_share": "1/4",
+        "acquisition_mode": "öröklés",
+        "acquisition_date": "2015.IV.20"
+      },
+      {
+        "location": "PÁSZTÓ",
+        "area_m2": 945,
+        "land_use": "-----",
+        "building_type": "üdülő",
+        "building_size_m2": 80,
+        "legal_status": "-----",
+        "ownership_status": "tulajdonos",
+        "ownership_share": "1/6",
+        "acquisition_mode": "öröklés",
+        "acquisition_date": "2015.IV.20"
+      },
+      {
+        "location": "PÁSZTÓ",
+        "area_m2": 1308,
+        "land_use": "szőlő",
+        "building_type": null,
+        "building_size_m2": null,
+        "legal_status": "-----",
+        "ownership_status": "tulajdonos",
+        "ownership_share": "-----",
+        "acquisition_mode": "vétel",
+        "acquisition_date": "2009, 2016"
+      },
+      {
+        "location": "PÁSZTÓ",
+        "area_m2": 814,
+        "land_use": "beépítetlen terület",
+        "building_type": null,
+        "building_size_m2": null,
+        "legal_status": "-----",
+        "ownership_status": "tulajdonos",
+        "ownership_share": "1/2",
+        "acquisition_mode": "vétel",
+        "acquisition_date": "2010"
+      }
+    ],
+    "vehicles": {
+      "motor_vehicle": null,
+      "watercraft_or_aircraft": null
+    },
+    "artworks": {
+      "artworks": null,
+      "collections": null
+    },
+    "other_assets": [],
+    "securities": [
+      {
+        "type": "ÉRTÉKPAPÍR",
+        "value_huf": 58188000
+      },
+      {
+        "type": "RÉSZVÉNY",
+        "value_huf": 1008000
+      }
+    ],
+    "savings_deposit": [
+      {
+        "value_huf": 15926000,
+        "exchange_rate": null
+      },
+      {
+        "value_huf": 639000,
+        "exchange_rate": null
+      }
+    ],
+    "cash": [],
+    "claims": {
+      "bank_deposit_claims": null,
+      "other_claims": [
+        {
+          "value_huf": 35000000,
+          "exchange_rate": null
+        }
+      ]
+    },
+    "other_properties": []
+  },
+  "liabilities": {
+    "public_debt": [],
+    "bank_loans": [],
+    "private_loans": [
+      {
+        "value_huf": 15000000,
+        "exchange_rate": null
+      }
+    ]
+  },
+  "income": {
+    "past_roles_and_affiliations": [
+      {
+        "name": "ORSZÁGGYŰLÉSI KÉPVISELŐ",
+        "role": null,
+        "income_category": "5"
+      },
+      {
+        "name": "ARA-COELI KFT TULAJDONOS",
+        "role": null,
+        "income_category": "díjazás nélküli"
+      },
+      {
+        "name": "UBLOT KFT TULAJDONOS",
+        "role": null,
+        "income_category": "díjazás nélküli"
+      },
+      {
+        "name": "GÖRBEORSZÁG TURISZTIKAI EGYESÜLET, ELNÖK",
+        "role": null,
+        "income_category": "díjazás nélküli"
+      },
+      {
+        "name": "NEOGRADIENSIS RÉGIÓ EGYESÜLET, ELNÖK",
+        "role": null,
+        "income_category": "díjazás nélküli"
+      },
+      {
+        "name": "POLGÁRI SALGÓTARJÁNÉRT ALAPÍTVÁNY, ALAPÍTÓ",
+        "role": null,
+        "income_category": "díjazás nélküli"
+      },
+      {
+        "name": "POLGÁRI PÁSZTÓÉRT ALAPÍTVÁNY, ALAPÍTÓ",
+        "role": null,
+        "income_category": "díjazás nélküli"
+      },
+      {
+        "name": "POLGÁRI BÁTONYTERENYÉÉRT ALAPÍTVÁNY, ALAPÍTÓ",
+        "role": null,
+        "income_category": "díjazás nélküli"
+      }
+    ],
+    "ongoing_income_generating_activities": [
+      {
+        "name": "ORSZÁGGYŰLÉSI KÉPVISELŐ",
+        "income_category": "4"
+      }
+    ],
+    "high_value_occasional_income": []
+  },
+  "economic_interests": {
+    "ongoing_corporate_and_trust_affiliations": [
+      {
+        "organization": "ARA-COELI KFT TULAJDONOS",
+        "role": "tulajdonos",
+        "income_category": "díjazás nélküli"
+      }
+    ],
+    "politically_relevant_and_controlling_business_interests": []
+  }
+}

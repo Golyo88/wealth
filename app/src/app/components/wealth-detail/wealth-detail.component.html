@@ -5,163 +5,541 @@
         <div class="card-body">
           <h2 class="card-title">{{ wealth.person.name }}</h2>
           <h5 class="card-subtitle mb-3 text-muted">{{ wealth.person.role }}</h5>
-          <button class="btn btn-outline-primary" routerLink="/wealth">
-            <i class="bi bi-arrow-left"></i> Vissza a listához
-          </button>
+
+          <!-- Összesítő adatok -->
+          <div class="row mt-3">
+            <div class="col-md-3">
+              <strong>Ingatlanok:</strong> {{ wealth.total_real_estate_count }} db
+            </div>
+            <div class="col-md-3">
+              <strong>Járművek:</strong> {{ wealth.total_vehicle_count }} db
+            </div>
+            <div class="col-md-3">
+              <strong>Értékpapírok:</strong> {{ wealth.total_security_count }} db
+            </div>
+            <div class="col-md-3">
+              <strong>Jövedelmek:</strong> {{ wealth.total_income_count }} db
+            </div>
+          </div>
+
+          <div class="row mt-3">
+            <div class="col-md-4">
+              <strong>Megtakarítások:</strong> {{ wealth.total_savings | number:'1.0-0' }} Ft
+            </div>
+            <div class="col-md-4">
+              <strong>Tartozások:</strong> {{ wealth.total_liabilities | number:'1.0-0' }} Ft
+            </div>
+            <div class="col-md-4">
+              <strong>Egyenleg:</strong> 
+              <span [class.text-success]="wealth.net_worth > 0" 
+                    [class.text-danger]="wealth.net_worth < 0">
+                {{ wealth.net_worth | number:'1.0-0' }} Ft
+              </span>
+            </div>
+          </div>
+
+          <div class="mt-3">
+            <button class="btn btn-outline-primary" routerLink="/wealth">
+              <i class="bi bi-arrow-left"></i> Vissza a listához
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
 
-  <!-- Ingatlanok -->
-  <div class="card mb-4" *ngIf="wealth.assets.real_estate?.length">
-    <div class="card-header">
-      <h3>Ingatlanok</h3>
-    </div>
-    <div class="card-body">
-      <div class="table-responsive">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Helyszín</th>
-              <th>Terület (m²)</th>
-              <th>Tulajdoni hányad</th>
-              <th>Szerzés módja</th>
-              <th>Szerzés ideje</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let estate of wealth.assets.real_estate">
-              <td>{{ estate.location }}</td>
-              <td>{{ estate.area_m2 }}</td>
-              <td>{{ estate.ownership_share }}</td>
-              <td>{{ estate.acquisition_mode }}</td>
-              <td>{{ estate.acquisition_date }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <!-- Járművek -->
-  <div class="card mb-4" *ngIf="wealth.assets.vehicles?.length">
-    <div class="card-header">
-      <h3>Járművek</h3>
-    </div>
-    <div class="card-body">
-      <div class="table-responsive">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Típus</th>
-              <th>Márka/Modell</th>
-              <th>Szerzés éve</th>
-              <th>Szerzés módja</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let vehicle of wealth.assets.vehicles">
-              <td>{{ vehicle.type }}</td>
-              <td>{{ vehicle.brand_model }}</td>
-              <td>{{ vehicle.acquisition_year }}</td>
-              <td>{{ vehicle.acquisition_mode }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <!-- Értékpapírok -->
-  <div class="card mb-4" *ngIf="wealth.assets.securities?.length">
-    <div class="card-header">
-      <h3>Értékpapírok</h3>
-    </div>
-    <div class="card-body">
-      <div class="table-responsive">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Típus</th>
-              <th>Érték (HUF)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let security of wealth.assets.securities">
-              <td>{{ security.type }}</td>
-              <td>{{ security.value_huf | number }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <!-- Megtakarítások -->
-  <div class="card mb-4" *ngIf="wealth.assets.savings">
-    <div class="card-header">
-      <h3>Megtakarítások</h3>
-    </div>
-    <div class="card-body">
-      <div class="row">
-        <div class="col-md-6" *ngIf="wealth.assets.savings.deposit_huf">
-          <p><strong>Betét (HUF):</strong> {{ wealth.assets.savings.deposit_huf | number }}</p>
+      <!-- Ingatlanok -->
+      <div class="card mb-4">
+        <div class="card-header">
+          <h3>Ingatlanok</h3>
         </div>
-        <div class="col-md-6" *ngIf="wealth.assets.savings.cash_huf">
-          <p><strong>Készpénz (HUF):</strong> {{ wealth.assets.savings.cash_huf | number }}</p>
-        </div>
-        <div class="col-md-6" *ngIf="wealth.assets.savings.bank_balance_huf">
-          <p><strong>Bankszámla egyenleg (HUF):</strong> {{ wealth.assets.savings.bank_balance_huf | number }}</p>
-        </div>
-        <div class="col-md-6" *ngIf="wealth.assets.savings.bank_balance_foreign_currency">
-          <p><strong>Deviza egyenleg:</strong> {{ wealth.assets.savings.bank_balance_foreign_currency | number }}</p>
+        <div class="card-body">
+          <div class="table-responsive" *ngIf="wealth.assets.real_estate?.length">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Helyszín</th>
+                  <th>Terület (m²)</th>
+                  <th>Földhasználat</th>
+                  <th>Épület típus</th>
+                  <th>Épület méret (m²)</th>
+                  <th>Tulajdoni hányad</th>
+                  <th>Szerzés módja</th>
+                  <th>Szerzés ideje</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let estate of wealth.assets.real_estate">
+                  <td>{{ estate.location }}</td>
+                  <td>{{ estate.area_m2 }}</td>
+                  <td>{{ estate.land_use }}</td>
+                  <td>{{ estate.building_type }}</td>
+                  <td>{{ estate.building_size_m2 }}</td>
+                  <td>{{ estate.ownership_share }}</td>
+                  <td>{{ estate.acquisition_mode }}</td>
+                  <td>{{ estate.acquisition_date }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
 
-  <!-- Tartozások -->
-  <div class="card mb-4" *ngIf="wealth.liabilities">
-    <div class="card-header">
-      <h3>Tartozások</h3>
-    </div>
-    <div class="card-body">
-      <div class="row">
-        <div class="col-md-4" *ngIf="wealth.liabilities.public_debt_huf">
-          <p><strong>Köztartozás (HUF):</strong> {{ wealth.liabilities.public_debt_huf | number }}</p>
+      <!-- Járművek -->
+      <div class="card mb-4">
+        <div class="card-header">
+          <h3>Járművek</h3>
         </div>
-        <div class="col-md-4" *ngIf="wealth.liabilities.bank_loans_huf">
-          <p><strong>Bankhitel (HUF):</strong> {{ wealth.liabilities.bank_loans_huf | number }}</p>
-        </div>
-        <div class="col-md-4" *ngIf="wealth.liabilities.private_loans_huf">
-          <p><strong>Magánkölcsön (HUF):</strong> {{ wealth.liabilities.private_loans_huf | number }}</p>
+        <div class="card-body">
+          <!-- Gépjárművek -->
+          <div *ngIf="wealth.assets.vehicles?.motor_vehicles?.length">
+            <h4>Gépjárművek</h4>
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Típus</th>
+                    <th>Márka/Modell</th>
+                    <th>Szerzés éve</th>
+                    <th>Szerzés módja</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let vehicle of wealth.assets.vehicles?.motor_vehicles">
+                    <td>{{ vehicle.type }}</td>
+                    <td>{{ vehicle.brand_model }}</td>
+                    <td>{{ vehicle.acquisition_year }}</td>
+                    <td>{{ vehicle.acquisition_mode }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Vízi vagy légi járművek -->
+          <div *ngIf="wealth.assets.vehicles?.watercraft_or_aircraft?.length" class="mt-4">
+            <h4>Vízi vagy légi járművek</h4>
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Típus</th>
+                    <th>Márka/Modell</th>
+                    <th>Szerzés éve</th>
+                    <th>Szerzés módja</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let vehicle of wealth.assets.vehicles?.watercraft_or_aircraft">
+                    <td>{{ vehicle.type }}</td>
+                    <td>{{ vehicle.brand_model }}</td>
+                    <td>{{ vehicle.acquisition_year }}</td>
+                    <td>{{ vehicle.acquisition_mode }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
 
-  <!-- Jövedelmek -->
-  <div class="card mb-4" *ngIf="wealth.income?.length">
-    <div class="card-header">
-      <h3>Jövedelmek</h3>
-    </div>
-    <div class="card-body">
-      <div class="table-responsive">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Pozíció</th>
-              <th>Jövedelem kategória</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let income of wealth.income">
-              <td>{{ income.position }}</td>
-              <td>{{ income.income_category }}</td>
-            </tr>
-          </tbody>
-        </table>
+      <!-- Műalkotások és gyűjtemények -->
+      <div class="card mb-4">
+        <div class="card-header">
+          <h3>Védett műalkotás, védett gyűjtemény</h3>
+        </div>
+        <div class="card-body">
+          <!-- Műalkotások -->
+          <div *ngIf="wealth.assets.artworks?.artworks?.length">
+            <h4>Műalkotások</h4>
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Megnevezés</th>
+                    <th>Mennyiség</th>
+                    <th>Szerzés éve</th>
+                    <th>Szerzés módja</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let artwork of wealth.assets.artworks?.artworks">
+                    <td>{{ artwork.name }}</td>
+                    <td>{{ artwork.quantity }}</td>
+                    <td>{{ artwork.acquisition_year }}</td>
+                    <td>{{ artwork.acquisition_mode }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Gyűjtemények -->
+          <div *ngIf="wealth.assets.artworks?.collections?.length" class="mt-4">
+            <h4>Gyűjtemények</h4>
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Megnevezés</th>
+                    <th>Mennyiség</th>
+                    <th>Szerzés éve</th>
+                    <th>Szerzés módja</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let collection of wealth.assets.artworks?.collections">
+                    <td>{{ collection.name }}</td>
+                    <td>{{ collection.quantity }}</td>
+                    <td>{{ collection.acquisition_year }}</td>
+                    <td>{{ collection.acquisition_mode }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Egyéb vagyontárgyak -->
+      <div class="card mb-4">
+        <div class="card-header">
+          <h3>Egyéb ingóság</h3>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive" *ngIf="wealth.assets.other_assets?.length">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Megnevezés</th>
+                  <th>Szerzés éve</th>
+                  <th>Szerzés módja</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let asset of wealth.assets.other_assets">
+                  <td>{{ asset.name }}</td>
+                  <td>{{ asset.acquisition_year }}</td>
+                  <td>{{ asset.acquisition_mode }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Értékpapírok -->
+      <div class="card mb-4">
+        <div class="card-header">
+          <h3>Értékpapírok</h3>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive" *ngIf="wealth.assets.securities?.length">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Típus</th>
+                  <th>Érték (HUF)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let security of wealth.assets.securities">
+                  <td>{{ security.type }}</td>
+                  <td>{{ security.value_huf | number }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Megtakarítások -->
+      <div class="card mb-4">
+        <div class="card-header">
+          <h3>Megtakarítások</h3>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6" *ngIf="wealth.assets.savings_deposit?.value_huf">
+              <p><strong>Betét (HUF):</strong> {{ wealth.assets.savings_deposit?.value_huf | number }}</p>
+            </div>
+            <div class="col-md-6" *ngIf="wealth.assets.cash?.value_huf">
+              <p><strong>Készpénz (HUF):</strong> {{ wealth.assets.cash?.value_huf | number }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Követelések -->
+      <div class="card mb-4">
+        <div class="card-header">
+          <h3>Követelések</h3>
+        </div>
+        <div class="card-body">
+          <div *ngIf="wealth.assets?.claims?.bank_deposit_claim?.length">
+            <h4>Hitelintézeti számlakövetelés</h4>
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Érték (HUF)</th>
+                    <th>devizában (forintértéken)</th>
+                    <th>Árfolyam</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let claim of wealth.assets?.claims?.bank_deposit_claim">
+                    <td>{{ claim.value_huf | number }}</td>
+                    <td>{{ claim.foreign_currency_value_in_huf | number }}</td>
+                    <td>{{ claim.exchange_rate | number }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+      
+          <div *ngIf="wealth.assets?.claims?.other_claims?.length" class="mt-4">
+            <h4>Egyéb követelések</h4>
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Érték (HUF)</th>
+                    <th>Árfolyam</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let claim of wealth.assets?.claims?.other_claims">
+                    <td>{{ claim.value_huf | number }}</td>
+                    <td>{{ claim.exchange_rate | number }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Egyéb tulajdon -->
+      <div class="card mb-4">
+        <div class="card-header">
+          <h3>Más vagyontárgy</h3>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive" *ngIf="wealth.assets.other_property?.length">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Megnevezés</th>
+                  <th>Érték (HUF)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let property of wealth.assets.other_property">
+                  <td>{{ property.name }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tartozások -->
+      <div class="card mb-4">
+        <div class="card-header">
+          <h3>Tartozások</h3>
+        </div>
+        <div class="card-body">
+          <!-- Köztartozások -->
+          <div *ngIf="wealth.liabilities.public_debt?.length">
+            <h4>Köztartozások</h4>
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Érték (HUF)</th>
+                    <th>Árfolyam</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let debt of wealth.liabilities.public_debt">
+                    <td>{{ debt.value_huf | number }}</td>
+                    <td>{{ debt.exchange_rate }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Bankhitelek -->
+          <div *ngIf="wealth.liabilities.bank_loans?.length" class="mt-4">
+            <h4>Bankhitelek</h4>
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Érték (HUF)</th>
+                    <th>Árfolyam</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let loan of wealth.liabilities.bank_loans">
+                    <td>{{ loan.value_huf | number }}</td>
+                    <td>{{ loan.exchange_rate }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Magánkölcsönök -->
+          <div *ngIf="wealth.liabilities.private_loans?.length" class="mt-4">
+            <h4>Magánkölcsönök</h4>
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Érték (HUF)</th>
+                    <th>Árfolyam</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let loan of wealth.liabilities.private_loans">
+                    <td>{{ loan.value_huf | number }}</td>
+                    <td>{{ loan.exchange_rate }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Jövedelmek -->
+      <div class="card mb-4">
+        <div class="card-header">
+          <h3>Jövedelmek</h3>
+        </div>
+        <div class="card-body">
+          <!-- Korábbi tisztségek és kapcsolatok -->
+          <div *ngIf="wealth.income.past_roles_and_affiliations?.length">
+            <h4>Korábbi tisztségek és kapcsolatok</h4>
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Megnevezés</th>
+                    <th>Tisztség</th>
+                    <th>Jövedelem kategória</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let role of wealth.income.past_roles_and_affiliations">
+                    <td>{{ role.name }}</td>
+                    <td>{{ role.role }}</td>
+                    <td>{{ role.income_category }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Folyamatban lévő jövedelemszerző tevékenységek -->
+          <div *ngIf="wealth.income.ongoing_income_generating_activity?.length" class="mt-4">
+            <h4>Folyamatban lévő jövedelemszerző tevékenységek</h4>
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Megnevezés</th>
+                    <th>Jövedelem kategória</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let activity of wealth.income.ongoing_income_generating_activity">
+                    <td>{{ activity.name }}</td>
+                    <td>{{ activity.income_category }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Alkalmi nagy értékű jövedelmek -->
+          <div *ngIf="wealth.income.high_value_occasional_income_item?.length" class="mt-4">
+            <h4>Alkalmi nagy értékű jövedelmek</h4>
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Megnevezés</th>
+                    <th>Jövedelem kategória</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let income of wealth.income.high_value_occasional_income_item">
+                    <td>{{ income.name }}</td>
+                    <td>{{ income.income_category }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gazdasági érdekeltségek -->
+      <div class="card mb-4">
+        <div class="card-header">
+          <h3>Gazdasági érdekeltségek</h3>
+        </div>
+        <div class="card-body">
+          <!-- Folyamatban lévő vállalati és bizalmi kapcsolatok -->
+          <div *ngIf="wealth.economic_interests.ongoing_corporate_and_trust_affiliation?.length">
+            <h4>Folyamatban lévő vállalati és bizalmi kapcsolatok</h4>
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Szervezet</th>
+                    <th>Tisztség</th>
+                    <th>Jövedelem kategória</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let affiliation of wealth.economic_interests.ongoing_corporate_and_trust_affiliation">
+                    <td>{{ affiliation.organization }}</td>
+                    <td>{{ affiliation.role }}</td>
+                    <td>{{ affiliation.income_category }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Politikailag releváns és irányító üzleti érdekeltségek -->
+          <div *ngIf="wealth.economic_interests.politically_relevant_and_controlling_business_interest" class="mt-4">
+            <h4></h4>
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Szervezet</th>
+                    <th>Tisztség</th>
+                    <th>Tulajdoni hányad</th>
+                    <th>Jövedelem kategória</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let interest of wealth.economic_interests.politically_relevant_and_controlling_business_interest">
+                    <td>{{ interest.organization }}</td>
+                    <td>{{ interest.role }}</td>
+                    <td>{{ interest.ownership_percentage }}</td>
+                    <td>{{ interest.income_category }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

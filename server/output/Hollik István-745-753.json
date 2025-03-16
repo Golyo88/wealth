@@ -1,1 +1,69 @@
-{"person":{"name":"Hollik István","role":"országgyűlési képviselő"},"assets":{"real_estate":[{"location":"Budapest I. kerület","area_m2":57,"land_use":"-----","building_type":null,"building_size_m2":null,"legal_status":"társasház","ownership_status":"tulajdonos","ownership_share":"50%","acquisition_mode":"családon belüli ajándékozás","acquisition_date":"2012"}],"vehicles":null,"securities":[{"type":"részvény","value_huf":13221700}],"savings":null},"liabilities":{"public_debt_huf":null,"bank_loans_huf":12328787,"private_loans_huf":null},"income":[{"position":"országgyűlési képviselő, kormánybiztos kuratóriumi elnök, Európa Szívében Alapítvány","income_category":"5"}],"economic_interests":[]}
+{
+  "person": {
+    "name": "Hollik István",
+    "role": "országgyűlési képviselő"
+  },
+  "assets": {
+    "real_estate": [
+      {
+        "location": "Budapest I. kerület",
+        "area_m2": 57,
+        "land_use": "-----",
+        "building_type": "társasház",
+        "building_size_m2": null,
+        "legal_status": null,
+        "ownership_status": "tulajdonos",
+        "ownership_share": "50%",
+        "acquisition_mode": "családon belüli ajándékozás",
+        "acquisition_date": "2012"
+      }
+    ],
+    "vehicles": {
+      "motor_vehicle": null,
+      "watercraft_or_aircraft": null
+    },
+    "artworks": {
+      "artworks": null,
+      "collections": null
+    },
+    "other_assets": [],
+    "securities": [
+      {
+        "type": "részvény",
+        "value_huf": 13221700
+      }
+    ],
+    "savings_deposit": null,
+    "cash": [],
+    "claims": {
+      "bank_deposit_claims": null,
+      "other_claims": null
+    },
+    "other_properties": []
+  },
+  "liabilities": {
+    "public_debt": [],
+    "bank_loans": [
+      {
+        "value_huf": 12328787,
+        "exchange_rate": null
+      }
+    ],
+    "private_loans": []
+  },
+  "income": {
+    "past_roles_and_affiliations": [
+      {
+        "name": "országgyűlési képviselő, kormánybiztos kuratóriumi elnök, Európa Szívében Alapítvány",
+        "role": null,
+        "income_category": "4"
+      }
+    ],
+    "ongoing_income_generating_activities": [],
+    "high_value_occasional_income": []
+  },
+  "economic_interests": {
+    "ongoing_corporate_and_trust_affiliations": [],
+    "politically_relevant_and_controlling_business_interests": []
+  }
+}

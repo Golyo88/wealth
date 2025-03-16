@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { WealthService } from '../../services/wealth.service';
-import { Wealth } from '../../models/wealth.model';
+import { Wealth, WealthView } from '../../models/wealth.model';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
@@ -13,7 +13,7 @@ import { RouterModule } from '@angular/router';
   styleUrls: ['./wealth-detail.component.scss'],
 })
 export class WealthDetailComponent implements OnInit {
-  wealth: Wealth | null = null;
+  wealth: WealthView | null = null;
   loading = false;
 
   constructor(

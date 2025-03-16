@@ -5,6 +5,7 @@ import {
   Wealth,
   PaginatedResponse,
   WealthFilters,
+  WealthView,
 } from '../models/wealth.model';
 import { environment } from '../../environments/environment';
 
@@ -20,7 +21,7 @@ export class WealthService {
     page: number = 1,
     pageSize: number = 10,
     filters?: WealthFilters
-  ): Observable<PaginatedResponse<Wealth>> {
+  ): Observable<PaginatedResponse<WealthView>> {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('page_size', pageSize.toString());
@@ -33,12 +34,15 @@ export class WealthService {
       });
     }
 
-    return this.http.get<PaginatedResponse<Wealth>>(`${this.apiUrl}/wealths`, {
-      params,
-    });
+    return this.http.get<PaginatedResponse<WealthView>>(
+      `${this.apiUrl}/wealths`,
+      {
+        params,
+      }
+    );
   }
 
-  findById(id: string): Observable<Wealth> {
-    return this.http.get<Wealth>(`${this.apiUrl}/wealths/${id}`);
+  findById(id: string): Observable<WealthView> {
+    return this.http.get<WealthView>(`${this.apiUrl}/people/${id}/wealth`);
   }
 }

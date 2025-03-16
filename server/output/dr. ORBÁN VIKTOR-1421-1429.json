@@ -1,1 +1,103 @@
-{"person":{"name":"dr. ORBÁN VIKTOR","role":"országgyűlési képviselő"},"assets":{"real_estate":[{"location":"Budapest XII.","area_m2":1544,"land_use":"-----","building_type":"lakóház","building_size_m2":233,"legal_status":"társasház","ownership_status":"tulajdonos","ownership_share":"1/2","acquisition_mode":"vétel","acquisition_date":"2002-05-09"},{"location":"Felcsút","area_m2":2079,"land_use":"belterület","building_type":"lakóház","building_size_m2":63,"legal_status":"-----","ownership_status":"tulajdonos","ownership_share":"1/1","acquisition_mode":"vétel","acquisition_date":"2013-09-17"}],"vehicles":null,"securities":null,"savings":null},"liabilities":{"public_debt_huf":null,"bank_loans_huf":null,"private_loans_huf":null},"income":[{"position":"miniszterelnök","income_category":"5"},{"position":"országgyűlési képviselő","income_category":"4"},{"position":"pártelnök","income_category":"1"}],"economic_interests":[{"organization":"-----","role":"pártelnök","ownership_percentage":null,"income_category":"1"}]}
+{
+  "person": {
+    "name": "dr. ORBÁN VIKTOR",
+    "role": "országgyűlési képviselő"
+  },
+  "assets": {
+    "real_estate": [
+      {
+        "location": "Budapest XII.",
+        "area_m2": 1544,
+        "land_use": "-----",
+        "building_type": "lakóház / lakás",
+        "building_size_m2": 233,
+        "legal_status": "társasház",
+        "ownership_status": "tulajdonos",
+        "ownership_share": "1/2",
+        "acquisition_mode": "vétel",
+        "acquisition_date": "2002.05.09"
+      },
+      {
+        "location": "Felcsút",
+        "area_m2": 2079,
+        "land_use": "belterület",
+        "building_type": "lakóház, udvar",
+        "building_size_m2": 63,
+        "legal_status": "-----",
+        "ownership_status": "tulajdonos",
+        "ownership_share": "1/1",
+        "acquisition_mode": "vétel",
+        "acquisition_date": "2013.09.17"
+      }
+    ],
+    "vehicles": {
+      "motor_vehicle": null,
+      "watercraft_or_aircraft": null
+    },
+    "artworks": {
+      "artworks": null,
+      "collections": null
+    },
+    "other_assets": [],
+    "securities": [],
+    "savings_deposit": [
+      {
+        "value_huf": 0,
+        "exchange_rate": null
+      }
+    ],
+    "cash": [],
+    "claims": {
+      "bank_deposit_claims": [
+        {
+          "value_huf": 13997000,
+          "foreign_currency_value_in_huf": null,
+          "exchange_rate": null
+        }
+      ],
+      "other_claims": null
+    },
+    "other_properties": []
+  },
+  "liabilities": {
+    "public_debt": [],
+    "bank_loans": [],
+    "private_loans": []
+  },
+  "income": {
+    "past_roles_and_affiliations": [
+      {
+        "name": "miniszterelnök 2019-2022",
+        "role": null,
+        "income_category": "5"
+      },
+      {
+        "name": "országgyűlési képviselő 2019",
+        "role": null,
+        "income_category": "3"
+      },
+      {
+        "name": "országgyűlési képviselő 2020-2022",
+        "role": null,
+        "income_category": "5"
+      },
+      {
+        "name": "pártelnök 2019-2022",
+        "role": null,
+        "income_category": "díjazás nélküli"
+      }
+    ],
+    "ongoing_income_generating_activities": [],
+    "high_value_occasional_income": []
+  },
+  "economic_interests": {
+    "ongoing_corporate_and_trust_affiliations": [
+      {
+        "organization": "pártelnök",
+        "role": "pártelnök",
+        "income_category": "díjazás nélküli"
+      }
+    ],
+    "politically_relevant_and_controlling_business_interests": []
+  }
+}

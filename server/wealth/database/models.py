@@ -1,20 +1,12 @@
 from sqlalchemy import Column, Integer, String, Float, Enum, ForeignKey
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
+from sqlalchemy.ext.declarative import declarative_base
 from wealth.model import (
+    IncomeCategory1,
+    IncomeCategory3,
     Role,
     IncomeCategory,
     Person as PersonModel,
-    Assets as AssetsModel,
-    Liabilities as LiabilitiesModel,
-    IncomeItem as IncomeItemModel,
-    EconomicInterest as EconomicInterestModel,
-    Wealth as WealthModel,
-    RealEstateItem as RealEstateModel,
-    Vehicle as VehicleModel,
-    Security as SecurityModel,
-    Savings as SavingsModel,
-    WealthModelWithId,
 )
 
 
@@ -28,14 +20,45 @@ class Person(Base):
     name = Column(String, nullable=False)
     role = Column(Enum(Role), nullable=False)
 
-    wealth = relationship("Wealth", back_populates="person")
+    real_estates = relationship("RealEstate", back_populates="person")
+    motor_vehicles = relationship("MotorVehicle", back_populates="person")
+    watercraft_or_aircraft = relationship(
+        "WatercraftOrAircraft", back_populates="person"
+    )
+    artworks = relationship("Artwork", back_populates="person")
+    collections = relationship("Collection", back_populates="person")
+    other_assets = relationship("OtherAsset", back_populates="person")
+    securities = relationship("Security", back_populates="person")
+    cash = relationship("Cash", back_populates="person")
+    savings_deposits = relationship("SavingsDeposit", back_populates="person")
+    bank_deposit_claims = relationship("BankDepositClaim", back_populates="person")
+    other_claims = relationship("OtherClaim", back_populates="person")
+    other_properties = relationship("OtherProperty", back_populates="person")
+    public_debts = relationship("PublicDebt", back_populates="person")
+    bank_loans = relationship("BankLoan", back_populates="person")
+    private_loans = relationship("PrivateLoan", back_populates="person")
+    past_roles_and_affiliations = relationship(
+        "PastRolesAndAffiliation", back_populates="person"
+    )
+    ongoing_income_generating_activities = relationship(
+        "OngoingIncomeGeneratingActivity", back_populates="person"
+    )
+    high_value_occasional_income_items = relationship(
+        "HighValueOccasionalIncomeItem", back_populates="person"
+    )
+    ongoing_corporate_and_trust_affiliations = relationship(
+        "OngoingCorporateAndTrustAffiliation", back_populates="person"
+    )
+    politically_relevant_and_controlling_business_interests = relationship(
+        "PoliticallyRelevantAndControllingBusinessInterest",
+        back_populates="person",
+    )
 
 
 class RealEstate(Base):
     __tablename__ = "real_estates"
 
     id = Column(Integer, primary_key=True)
-    wealth_id = Column(Integer, ForeignKey("wealth.id"))
     location = Column(String, nullable=False)
     area_m2 = Column(Integer, nullable=False)
     land_use = Column(String, nullable=False)
@@ -47,139 +70,234 @@ class RealEstate(Base):
     acquisition_mode = Column(String, nullable=False)
     acquisition_date = Column(String, nullable=False)
 
-
-class Savings(Base):
-    __tablename__ = "savings"
-
-    id = Column(Integer, primary_key=True)
-    wealth_id = Column(Integer, ForeignKey("wealth.id"))
-    deposit_huf = Column(Integer)
-    cash_huf = Column(Integer)
-    bank_balance_huf = Column(Integer)
-    bank_balance_foreign_currency = Column(Integer)
-    exchange_rate = Column(Float)
+    person_id = Column(Integer, ForeignKey("persons.id"), nullable=False)
+    person = relationship("Person", back_populates="real_estates")
 
 
-class Liability(Base):
-    __tablename__ = "liabilities"
+class MotorVehicle(Base):
+    __tablename__ = "motor_vehicles"
 
     id = Column(Integer, primary_key=True)
-    wealth_id = Column(Integer, ForeignKey("wealth.id"))
-    public_debt_huf = Column(Integer, nullable=True)
-    bank_loans_huf = Column(Integer, nullable=True)
-    private_loans_huf = Column(Integer, nullable=True)
-
-
-class IncomeItem(Base):
-    __tablename__ = "income_items"
-
-    id = Column(Integer, primary_key=True)
-    wealth_id = Column(Integer, ForeignKey("wealth.id"))
-    position_name = Column(String, nullable=False)
-    income_category = Column(Enum(IncomeCategory), nullable=False)
-
-    def to_model(self):
-        return IncomeItemModel(
-            position=self.position_name,
-            income_category=self.income_category,
-        )
-
-
-class EconomicInterest(Base):
-    __tablename__ = "economic_interests"
-
-    id = Column(Integer, primary_key=True)
-    wealth_id = Column(Integer, ForeignKey("wealth.id"))
-    organization = Column(String, nullable=False)
-    role = Column(String, nullable=False)
-    ownership_percentage = Column(String)
-    income_category = Column(Enum(IncomeCategory), nullable=False)
-
-
-class Vehicle(Base):
-    __tablename__ = "vehicles"
-
-    id = Column(Integer, primary_key=True)
-    wealth_id = Column(Integer, ForeignKey("wealth.id"))
     type = Column(String, nullable=False)
     brand_model = Column(String, nullable=False)
     acquisition_year = Column(Integer, nullable=False)
     acquisition_mode = Column(String, nullable=False)
+
+    person_id = Column(Integer, ForeignKey("persons.id"), nullable=False)
+    person = relationship("Person", back_populates="motor_vehicles")
+
+
+class WatercraftOrAircraft(Base):
+    __tablename__ = "watercraft_or_aircraft"
+
+    id = Column(Integer, primary_key=True)
+    type = Column(String, nullable=False)
+    brand_model = Column(String, nullable=False)
+    acquisition_year = Column(Integer, nullable=False)
+    acquisition_mode = Column(String, nullable=False)
+
+    person_id = Column(Integer, ForeignKey("persons.id"), nullable=False)
+    person = relationship("Person", back_populates="watercraft_or_aircraft")
+
+
+class Artwork(Base):
+    __tablename__ = "artworks"
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String, nullable=False)
+    quantity = Column(Integer, nullable=False)
+    acquisition_year = Column(Integer, nullable=False)
+    acquisition_mode = Column(String, nullable=False)
+
+    person_id = Column(Integer, ForeignKey("persons.id"), nullable=False)
+    person = relationship("Person", back_populates="artworks")
+
+
+class Collection(Base):
+    __tablename__ = "collections"
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String, nullable=False)
+    quantity = Column(Integer, nullable=False)
+    acquisition_year = Column(Integer, nullable=False)
+    acquisition_mode = Column(String, nullable=False)
+
+    person_id = Column(Integer, ForeignKey("persons.id"), nullable=False)
+    person = relationship("Person", back_populates="collections")
+
+
+class OtherAsset(Base):
+    __tablename__ = "other_assets"
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String, nullable=False)
+    acquisition_year = Column(Integer, nullable=False)
+    acquisition_mode = Column(String, nullable=False)
+
+    person_id = Column(Integer, ForeignKey("persons.id"), nullable=False)
+    person = relationship("Person", back_populates="other_assets")
 
 
 class Security(Base):
     __tablename__ = "securities"
 
     id = Column(Integer, primary_key=True)
-    wealth_id = Column(Integer, ForeignKey("wealth.id"))
     type = Column(String, nullable=False)
     value_huf = Column(Integer, nullable=False)
 
+    person_id = Column(Integer, ForeignKey("persons.id"), nullable=False)
+    person = relationship("Person", back_populates="securities")
 
-class Wealth(Base):
-    __tablename__ = "wealth"
+
+class SavingsDeposit(Base):
+    __tablename__ = "savings_deposits"
 
     id = Column(Integer, primary_key=True)
-    person_id = Column(Integer, ForeignKey("persons.id"))
+    value_huf = Column(Integer, nullable=False)
+    exchange_rate = Column(Float)
 
-    person = relationship("Person", back_populates="wealth")
-    real_estates = relationship("RealEstate", backref="wealth")
-    vehicles = relationship("Vehicle", backref="wealth")
-    securities = relationship("Security", backref="wealth")
-    savings = relationship("Savings", backref="wealth", uselist=False)
-    liabilities = relationship("Liability", backref="wealth")
-    income_items = relationship("IncomeItem", backref="wealth")
-    economic_interests = relationship("EconomicInterest", backref="wealth")
+    person_id = Column(Integer, ForeignKey("persons.id"), nullable=False)
+    person = relationship("Person", back_populates="savings_deposits")
 
-    def to_model(self):
-        return WealthModelWithId(
-            id=self.id,
-            person=PersonModel.model_validate(self.person),
-            assets=AssetsModel.model_validate(
-                {
-                    "real_estate": (
-                        [
-                            RealEstateModel.model_validate(real_estate)
-                            for real_estate in self.real_estates
-                        ]
-                        if self.real_estates
-                        else None
-                    ),
-                    "vehicles": (
-                        [
-                            VehicleModel.model_validate(vehicle)
-                            for vehicle in self.vehicles
-                        ]
-                        if self.vehicles
-                        else None
-                    ),
-                    "securities": (
-                        [
-                            SecurityModel.model_validate(security)
-                            for security in self.securities
-                        ]
-                        if self.securities
-                        else None
-                    ),
-                    "savings": (
-                        SavingsModel.model_validate(self.savings)
-                        if self.savings
-                        else None
-                    ),
-                }
-            ),
-            liabilities=LiabilitiesModel.model_validate(self.liabilities[0]),
-            income=(
-                [IncomeItem.to_model(income) for income in self.income_items]
-                if self.income_items
-                else []
-            ),
-            economic_interests=(
-                [
-                    EconomicInterestModel.model_validate(interest)
-                    for interest in self.economic_interests
-                ]
-                if self.economic_interests
-                else []
-            ),
-        )
+
+class Cash(Base):
+    __tablename__ = "cash"
+
+    id = Column(Integer, primary_key=True)
+    value_huf = Column(Integer, nullable=False)
+    exchange_rate = Column(Float)
+
+    person_id = Column(Integer, ForeignKey("persons.id"), nullable=False)
+    person = relationship("Person", back_populates="cash")
+
+
+class BankDepositClaim(Base):
+    __tablename__ = "bank_deposit_claims"
+
+    id = Column(Integer, primary_key=True)
+    value_huf = Column(Integer, nullable=False)
+    foreign_currency_value_in_huf = Column(Integer)
+    exchange_rate = Column(Float)
+
+    person_id = Column(Integer, ForeignKey("persons.id"), nullable=False)
+    person = relationship("Person", back_populates="bank_deposit_claims")
+
+
+class OtherClaim(Base):
+    __tablename__ = "other_claims"
+
+    id = Column(Integer, primary_key=True)
+    value_huf = Column(Integer, nullable=False)
+    exchange_rate = Column(Float)
+
+    person_id = Column(Integer, ForeignKey("persons.id"), nullable=False)
+    person = relationship("Person", back_populates="other_claims")
+
+
+class OtherProperty(Base):
+    __tablename__ = "other_properties"
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String, nullable=False)
+
+    person_id = Column(Integer, ForeignKey("persons.id"), nullable=False)
+    person = relationship("Person", back_populates="other_properties")
+
+
+class PublicDebt(Base):
+    __tablename__ = "public_debts"
+
+    id = Column(Integer, primary_key=True)
+    value_huf = Column(Integer, nullable=False)
+    exchange_rate = Column(Float)
+
+    person_id = Column(Integer, ForeignKey("persons.id"), nullable=False)
+    person = relationship("Person", back_populates="public_debts")
+
+
+class BankLoan(Base):
+    __tablename__ = "bank_loans"
+
+    id = Column(Integer, primary_key=True)
+    value_huf = Column(Integer, nullable=False)
+    exchange_rate = Column(Float)
+
+    person_id = Column(Integer, ForeignKey("persons.id"), nullable=False)
+    person = relationship("Person", back_populates="bank_loans")
+
+
+class PrivateLoan(Base):
+    __tablename__ = "private_loans"
+
+    id = Column(Integer, primary_key=True)
+    value_huf = Column(Integer, nullable=False)
+    exchange_rate = Column(Float)
+
+    person_id = Column(Integer, ForeignKey("persons.id"), nullable=False)
+    person = relationship("Person", back_populates="private_loans")
+
+
+class PastRolesAndAffiliation(Base):
+    __tablename__ = "past_roles_and_affiliations"
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String, nullable=False)
+    role = Column(String)
+    income_category = Column(Enum(IncomeCategory), nullable=False)
+
+    person_id = Column(Integer, ForeignKey("persons.id"), nullable=False)
+    person = relationship("Person", back_populates="past_roles_and_affiliations")
+
+
+class OngoingIncomeGeneratingActivity(Base):
+    __tablename__ = "ongoing_income_generating_activities"
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String, nullable=False)
+    income_category = Column(Enum(IncomeCategory1), nullable=False)
+
+    person_id = Column(Integer, ForeignKey("persons.id"), nullable=False)
+    person = relationship(
+        "Person", back_populates="ongoing_income_generating_activities"
+    )
+
+
+class HighValueOccasionalIncomeItem(Base):
+    __tablename__ = "high_value_occasional_income_items"
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String, nullable=False)
+    income_category = Column(Enum(IncomeCategory1), nullable=False)
+
+    person_id = Column(Integer, ForeignKey("persons.id"), nullable=False)
+    person = relationship("Person", back_populates="high_value_occasional_income_items")
+
+
+class OngoingCorporateAndTrustAffiliation(Base):
+    __tablename__ = "ongoing_corporate_and_trust_affiliations"
+
+    id = Column(Integer, primary_key=True)
+    organization = Column(String, nullable=False)
+    role = Column(String, nullable=False)
+    income_category = Column(Enum(IncomeCategory3), nullable=False)
+
+    person_id = Column(Integer, ForeignKey("persons.id"), nullable=False)
+    person = relationship(
+        "Person", back_populates="ongoing_corporate_and_trust_affiliations"
+    )
+
+
+class PoliticallyRelevantAndControllingBusinessInterest(Base):
+    __tablename__ = "politically_relevant_and_controlling_business_interests"
+
+    id = Column(Integer, primary_key=True)
+    organization = Column(String, nullable=False)
+    role = Column(String, nullable=False)
+    ownership_percentage = Column(String)
+    income_category = Column(Enum(IncomeCategory3), nullable=False)
+
+    person_id = Column(Integer, ForeignKey("persons.id"), nullable=False)
+    person = relationship(
+        "Person",
+        back_populates="politically_relevant_and_controlling_business_interests",
+    )

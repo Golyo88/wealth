@@ -27,6 +27,7 @@
       "properties": {
         "real_estate": {
           "type": "array",
+          "description": "A) rész, I. Ingatlanok (kivéve a nyilatkozatot adó, valamint a vele közös háztartásban élő 2 házastársa vagy élettársa és gyermeke(i) kizárólagos használatára fenntartott ingatlant)",
           "items": {
             "type": "object",
             "properties": {
@@ -74,33 +75,150 @@
           }
         },
         "vehicles": {
+          "type": "object",
+          "properties": {
+            "motor_vehicle": {
+              "type": "array",
+              "description": "A) rész, II. Nagy értékű3 ingóságok, 1. Gépjárművek",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string"
+                  },
+                  "brand_model": {
+                    "type": "string"
+                  },
+                  "acquisition_year": {
+                    "type": "integer"
+                  },
+                  "acquisition_mode": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "type",
+                  "brand_model",
+                  "acquisition_year",
+                  "acquisition_mode"
+                ]
+              }
+            },
+            "watercraft_or_aircraft": {
+              "type": "array",
+              "description": "A) rész, II. Nagy értékű3 ingóságok, 2. Vízi vagy légi jármű",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string"
+                  },
+                  "brand_model": {
+                    "type": "string"
+                  },
+                  "acquisition_year": {
+                    "type": "integer"
+                  },
+                  "acquisition_mode": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "type",
+                  "brand_model",
+                  "acquisition_year",
+                  "acquisition_mode"
+                ]
+              }
+            }
+          }
+        },
+        "artworks": {
+          "type": "object",
+          "description": "A) rész, II. Nagy értékű ingóságok, 3. Védett műalkotás, védett gyűjtemény",
+          "properties": {
+            "artworks": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "quantity": {
+                    "type": "integer"
+                  },
+                  "acquisition_year": {
+                    "type": "integer",
+                    "nullable": true
+                  },
+                  "acquisition_mode": {
+                    "type": "string",
+                    "nullable": true
+                  }
+                },
+                "required": [
+                  "name",
+                  "quantity"
+                ]
+              }
+            },
+            "collections": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "quantity": {
+                    "type": "integer"
+                  },
+                  "acquisition_year": {
+                    "type": "integer",
+                    "nullable": true
+                  },
+                  "acquisition_mode": {
+                    "type": "string",
+                    "nullable": true
+                  }
+                },
+                "required": [
+                  "name",
+                  "quantity",
+                  "acquisition_year",
+                  "acquisition_mode"
+                ]
+              }
+            }
+          }
+        },
+        "other_assets": {
           "type": "array",
+          "description": "A) rész, II. Nagy értékű ingóságok, 4. Egyéb ingóság",
           "items": {
             "type": "object",
             "properties": {
-              "type": {
-                "type": "string"
-              },
-              "brand_model": {
+              "name": {
                 "type": "string"
               },
               "acquisition_year": {
-                "type": "integer"
+                "type": "integer",
+                "nullable": true
               },
               "acquisition_mode": {
-                "type": "string"
+                "type": "string",
+                "nullable": true
               }
             },
             "required": [
-              "type",
-              "brand_model",
-              "acquisition_year",
-              "acquisition_mode"
+              "name"
             ]
           }
         },
         "securities": {
           "type": "array",
+          "description": "A) rész, II. Nagy értékű ingóságok, 5. Értékpapírban elhelyezett megtakarítás vagy egyéb befektetés (részvény, kötvény, részjegy, kincstárjegy, vagyonjegy, részesedés magántőkealapban, biztosítás stb.)",
           "items": {
             "type": "object",
             "properties": {
@@ -117,106 +235,356 @@
             ]
           }
         },
-        "savings": {
+        "savings_deposit": {
+          "type": "array",
+          "description": "A) rész, II. Nagy értékű ingóságok, 6. Takarékbetétben elhelyezett megtakarítás",
+          "items": {
+            "type": "object",
+            "properties": {
+              "value_huf": {
+                "type": "integer"
+              },
+              "exchange_rate": {
+                "type": "number",
+                "nullable": true
+              }
+            },
+            "required": [
+              "value_huf"
+            ]
+          }
+        },
+        "cash": {
+          "type": "array",
+          "description": "A) rész, II. Nagy értékű ingóságok, 7. Készpénz",
+          "items": {
+            "type": "object",
+            "properties": {
+              "value_huf": {
+                "type": "integer"
+              },
+              "exchange_rate": {
+                "type": "number",
+                "nullable": true
+              }
+            },
+            "required": [
+              "value_huf"
+            ]
+          }
+        },
+        "claims": {
           "type": "object",
+          "description": "A) rész, II. Nagy értékű ingóságok, 8. Hitelintézeti számlakövetelés vagy más, szerződés alapján fennálló pénzkövetelés",
           "properties": {
-            "deposit_huf": {
-              "type": "integer"
+            "bank_deposit_claims": {
+              "type": "array",
+              "description": "A) rész, II. Nagy értékű ingóságok, 8. Hitelintézeti számlakövetelés vagy más, szerződés alapján fennálló pénzkövetelés, a)",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "value_huf": {
+                    "type": "integer"
+                  },
+                  "foreign_currency_value_in_huf": {
+                    "type": "integer",
+                    "nullable": true
+                  },
+                  "exchange_rate": {
+                    "type": "number",
+                    "nullable": true
+                  }
+                },
+                "required": [
+                  "value_huf"
+                ]
+              }
             },
-            "cash_huf": {
-              "type": "integer"
-            },
-            "bank_balance_huf": {
-              "type": "integer"
-            },
-            "bank_balance_foreign_currency": {
-              "type": "integer",
-              "nullable": true
-            },
-            "exchange_rate": {
-              "type": "number",
-              "nullable": true
+            "other_claims": {
+              "type": "array",
+              "description": "A) rész, II. Nagy értékű ingóságok, 8. Hitelintézeti számlakövetelés vagy más, szerződés alapján fennálló pénzkövetelés, b)",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "value_huf": {
+                    "type": "integer"
+                  },
+                  "exchange_rate": {
+                    "type": "number",
+                    "nullable": true
+                  }
+                },
+                "required": [
+                  "value_huf"
+                ]
+              }
             }
           }
+        },
+        "other_properties": {
+          "type": "array",
+          "description": "A) rész, II. Nagy értékű ingóságok, 9. Más vagyontárgy",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "name"
+            ]
+          }
         }
-      }
+      },
+      "required": [
+        "real_estate",
+        "vehicles",
+        "artworks",
+        "other_assets",
+        "securities",
+        "cash",
+        "claims",
+        "other_properties"
+      ]
     },
     "liabilities": {
       "type": "object",
+      "description": "A) rész, III. Tartozások",
       "properties": {
-        "public_debt_huf": {
-          "type": "integer",
-          "nullable": true
+        "public_debt": {
+          "type": "array",
+          "description": "A) rész, III. Tartozások, 1. Köztartozás",
+          "items": {
+            "type": "object",
+            "properties": {
+              "value_huf": {
+                "type": "integer"
+              },
+              "exchange_rate": {
+                "type": "number",
+                "nullable": true
+              }
+            },
+            "required": [
+              "value_huf"
+            ]
+          }
         },
-        "bank_loans_huf": {
-          "type": "integer",
-          "nullable": true
+        "bank_loans": {
+          "type": "array",
+          "description": "A) rész, III. Tartozások, 2. Hitelintézettel szembeni tartozás",
+          "items": {
+            "type": "object",
+            "properties": {
+              "value_huf": {
+                "type": "integer"
+              },
+              "exchange_rate": {
+                "type": "number",
+                "nullable": true
+              }
+            },
+            "required": [
+              "value_huf"
+            ]
+          }
         },
-        "private_loans_huf": {
-          "type": "integer",
-          "nullable": true
+        "private_loans": {
+          "type": "array",
+          "description": "A) rész, III. Tartozások, 3. Magánszemélyekkel szembeni tartozás",
+          "items": {
+            "type": "object",
+            "properties": {
+              "value_huf": {
+                "type": "integer"
+              },
+              "exchange_rate": {
+                "type": "number",
+                "nullable": true
+              }
+            },
+            "required": [
+              "value_huf"
+            ]
+          }
         }
-      }
+      },
+      "required": [
+        "public_debt",
+        "bank_loans",
+        "private_loans"
+      ]
     },
     "income": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "position": {
-            "type": "string"
-          },
-          "income_category": {
-            "type": "string",
-            "enum": [
-              "díjazás nélküli",
-              "1",
-              "2",
-              "3",
-              "4",
-              "5"
+      "type": "object",
+      "description": "B) rész, JÖVEDELEMNYILATKOZAT",
+      "properties": {
+        "past_roles_and_affiliations": {
+          "type": "array",
+          "description": "B) rész, JÖVEDELEMNYILATKOZAT, I.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "role": {
+                "type": "string",
+                "nullable": true
+              },
+              "income_category": {
+                "type": "string",
+                "enum": [
+                  "díjazás nélküli",
+                  "1",
+                  "2",
+                  "3",
+                  "4",
+                  "5"
+                ]
+              }
+            },
+            "required": [
+              "name",
+              "income_category"
             ]
           }
         },
-        "required": [
-          "position",
-          "income_category"
-        ]
-      }
+        "ongoing_income_generating_activities": {
+          "type": "array",
+          "description": "B) rész, JÖVEDELEMNYILATKOZAT, II.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "income_category": {
+                "type": "string",
+                "enum": [
+                  "1",
+                  "2",
+                  "3",
+                  "4",
+                  "5"
+                ]
+              }
+            },
+            "required": [
+              "name",
+              "income_category"
+            ]
+          }
+        },
+        "high_value_occasional_income": {
+          "type": "array",
+          "description": "B) rész, JÖVEDELEMNYILATKOZAT, III.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "income_category": {
+                "type": "string",
+                "enum": [
+                  "1",
+                  "2",
+                  "3",
+                  "4",
+                  "5"
+                ]
+              }
+            },
+            "required": [
+              "name",
+              "income_category"
+            ]
+          }
+        }
+      },
+      "required": [
+        "past_roles_and_affiliations",
+        "ongoing_income_generating_activities",
+        "high_value_occasional_income"
+      ]
     },
     "economic_interests": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "organization": {
-            "type": "string"
-          },
-          "role": {
-            "type": "string"
-          },
-          "ownership_percentage": {
-            "type": "string",
-            "nullable": true
-          },
-          "income_category": {
-            "type": "string",
-            "enum": [
-              "díjazás nélküli",
-              "1",
-              "2",
-              "3",
-              "4",
-              "5"
+      "type": "object",
+      "description": "C) rész, GAZDASÁGI ÉRDEKELTSÉGI NYILATKOZAT",
+      "properties": {
+        "ongoing_corporate_and_trust_affiliations": {
+          "type": "array",
+          "description": "C) rész, GAZDASÁGI ÉRDEKELTSÉGI NYILATKOZAT, I.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "organization": {
+                "type": "string"
+              },
+              "role": {
+                "type": "string"
+              },
+              "income_category": {
+                "type": "string",
+                "enum": [
+                  "díjazás nélküli",
+                  "1",
+                  "2",
+                  "3",
+                  "4",
+                  "5"
+                ]
+              }
+            },
+            "required": [
+              "organization",
+              "role",
+              "income_category"
             ]
           }
         },
-        "required": [
-          "organization",
-          "role",
-          "income_category"
-        ]
-      }
+        "politically_relevant_and_controlling_business_interests": {
+          "type": "array",
+          "description": "C) rész, GAZDASÁGI ÉRDEKELTSÉGI NYILATKOZAT, II.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "organization": {
+                "type": "string"
+              },
+              "role": {
+                "type": "string"
+              },
+              "ownership_percentage": {
+                "type": "string",
+                "nullable": true
+              },
+              "income_category": {
+                "type": "string",
+                "enum": [
+                  "díjazás nélküli",
+                  "1",
+                  "2",
+                  "3",
+                  "4",
+                  "5"
+                ]
+              }
+            },
+            "required": [
+              "organization",
+              "role",
+              "income_category"
+            ]
+          }
+        }
+      },
+      "required": [
+        "ongoing_corporate_and_trust_affiliations",
+        "politically_relevant_and_controlling_business_interests"
+      ]
     }
   },
   "required": [

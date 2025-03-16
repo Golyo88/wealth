@@ -9,6 +9,10 @@ export interface Person {
   role: Role;
 }
 
+export interface PersonView extends Person {
+  id: number;
+}
+
 export interface RealEstate {
   location: string;
   area_m2: number;
@@ -22,9 +26,46 @@ export interface RealEstate {
   acquisition_date: string;
 }
 
-export interface Vehicle {
+export interface MotorVehicle {
   type: string;
   brand_model: string;
+  acquisition_year: number;
+  acquisition_mode: string;
+}
+
+export interface WatercraftOrAircraft {
+  type: string;
+  brand_model: string;
+  acquisition_year: number;
+  acquisition_mode: string;
+}
+
+export interface Vehicles {
+  motor_vehicles?: MotorVehicle[];
+  watercraft_or_aircraft?: WatercraftOrAircraft[];
+}
+
+export interface Artwork {
+  name: string;
+  quantity: number;
+  acquisition_year: number;
+  acquisition_mode: string;
+}
+
+export interface Collection {
+  name: string;
+  quantity: number;
+  acquisition_year: number;
+  acquisition_mode: string;
+}
+
+export interface Artworks {
+  artworks?: Artwork[];
+  collections?: Collection[];
+}
+
+export interface OtherAssets {
+  name: string;
   acquisition_year: number;
   acquisition_mode: string;
 }
@@ -34,46 +75,145 @@ export interface Security {
   value_huf: number;
 }
 
-export interface Savings {
-  deposit_huf?: number;
-  cash_huf?: number;
-  bank_balance_huf?: number;
-  bank_balance_foreign_currency?: number;
+export interface SavingsDeposit {
+  value_huf: number;
   exchange_rate?: number;
+}
+
+export interface Cash {
+  value_huf: number;
+  exchange_rate?: number;
+}
+
+export interface BankDepositClaim {
+  value_huf: number;
+  foreign_currency_value_in_huf?: string;
+  exchange_rate?: number;
+}
+
+export interface OtherClaims {
+  value_huf: number;
+  exchange_rate?: number;
+}
+
+export interface Claims {
+  bank_deposit_claim?: BankDepositClaim[];
+  other_claims?: OtherClaims[];
+}
+
+export interface OtherProperty {
+  name: string;
 }
 
 export interface Assets {
   real_estate?: RealEstate[];
-  vehicles?: Vehicle[];
+  vehicles?: Vehicles;
+  artworks?: Artworks;
+  other_assets?: OtherAssets[];
   securities?: Security[];
-  savings?: Savings;
+  savings_deposit?: SavingsDeposit;
+  cash?: Cash;
+  claims?: Claims;
+  other_property?: OtherProperty[];
+}
+
+export interface PublicDebt {
+  value_huf: number;
+  exchange_rate?: number;
+}
+
+export interface BankLoan {
+  value_huf: number;
+  exchange_rate?: number;
+}
+
+export interface PrivateLoan {
+  value_huf: number;
+  exchange_rate?: number;
 }
 
 export interface Liabilities {
-  public_debt_huf?: number;
-  bank_loans_huf?: number;
-  private_loans_huf?: number;
+  public_debt?: PublicDebt[];
+  bank_loans?: BankLoan[];
+  private_loans?: PrivateLoan[];
 }
 
-export interface IncomeItem {
-  position: string;
-  income_category: string;
+export enum IncomeCategory {
+  field_1 = '1',
+  field_2 = '2',
+  field_3 = '3',
+  field_4 = '4',
+  field_5 = '5',
 }
 
-export interface EconomicInterest {
+export enum IncomeCategoryWithNoDijazas {
+  DIJAZAS_NELKULI = 'díjazás nélküli',
+  field_1 = '1',
+  field_2 = '2',
+  field_3 = '3',
+  field_4 = '4',
+  field_5 = '5',
+}
+
+export interface PastRolesAndAffiliations {
+  name: string;
+  role: string;
+  income_category: IncomeCategoryWithNoDijazas;
+}
+
+export interface OngoingIncomeGeneratingActivity {
+  name: string;
+  income_category: IncomeCategory;
+}
+
+export interface HighValueOccasionalIncomeItem {
+  name: string;
+  income_category: IncomeCategory;
+}
+
+export interface Income {
+  past_roles_and_affiliations?: PastRolesAndAffiliations[];
+  ongoing_income_generating_activity?: OngoingIncomeGeneratingActivity[];
+  high_value_occasional_income_item?: HighValueOccasionalIncomeItem[];
+}
+
+export interface OngoingCorporateAndTrustAffiliation {
+  organization: string;
+  role: string;
+  income_category: IncomeCategoryWithNoDijazas;
+}
+
+export interface PoliticallyRelevantAndControllingBusinessInterest {
   organization: string;
   role: string;
   ownership_percentage?: string;
-  income_category: string;
+  income_category: IncomeCategoryWithNoDijazas;
+}
+
+export interface EconomicInterests {
+  ongoing_corporate_and_trust_affiliation?: OngoingCorporateAndTrustAffiliation[];
+  politically_relevant_and_controlling_business_interest?: PoliticallyRelevantAndControllingBusinessInterest[];
 }
 
 export interface Wealth {
-  id: number;
   person: Person;
   assets: Assets;
   liabilities: Liabilities;
-  income: IncomeItem[];
-  economic_interests: EconomicInterest[];
+  income: Income;
+  economic_interests: EconomicInterests;
+}
+
+export interface WealthView extends Wealth {
+  person: PersonView;
+
+  total_real_estate_count: number;
+  total_vehicle_count: number;
+  total_artwork_count: number;
+  total_security_count: number;
+  total_income_count: number;
+  total_savings: number;
+  total_liabilities: number;
+  net_worth: number;
 }
 
 export interface PaginatedResponse<T> {

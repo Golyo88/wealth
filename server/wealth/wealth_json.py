@@ -20,8 +20,12 @@ async def main():
         gpt_client=gpt_client, schema_path="wealth/wealth.schema.json"
     )
 
+    pdf_dir = Path("split_representatives")
+    output_dir = Path("output")
+    output_dir.mkdir(exist_ok=True)
+
     async for result in processor.process_pdfs(
-        pdf_directory="split_representatives", output_dir=output_dir, max_concurrent=3
+        pdf_dir=pdf_dir, output_dir=output_dir, max_concurrent=3
     ):
         if result["success"]:
             pdf_name = Path(result["pdf_path"]).stem

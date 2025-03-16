@@ -5,5 +5,5 @@ import { WealthDetailComponent } from './components/wealth-detail/wealth-detail.
 export const routes: Routes = [
   { path: '', redirectTo: '/wealth', pathMatch: 'full' },
   { path: 'wealth', component: WealthListComponent },
-  { path: 'wealth/:id', component: WealthDetailComponent },
+  { path: 'people/:id/wealth', component: WealthDetailComponent },
 ];
