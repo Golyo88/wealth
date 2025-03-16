@@ -97,7 +97,7 @@ export interface OtherClaims {
 }
 
 export interface Claims {
-  bank_deposit_claim?: BankDepositClaim[];
+  bank_deposit_claims?: BankDepositClaim[];
   other_claims?: OtherClaims[];
 }
 
