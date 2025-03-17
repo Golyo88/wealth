@@ -46,8 +46,10 @@ class WealthView(Wealth):
     total_vehicle_count: int
     total_artwork_count: int
     total_security_count: int
+    total_securities_amount: int
     total_income_count: int
     total_savings: int
+    total_savings_without_securities: int
     total_liabilities: int
     net_worth: int
 
@@ -63,18 +65,20 @@ class WealthView(Wealth):
         )
         total_artwork_count = len(person.artworks) + len(person.collections)
         total_security_count = len(person.securities)
+        total_securities_amount = sum(
+            security.value_huf for security in person.securities
+        )
         total_income_count = (
             len(person.past_roles_and_affiliations)
             + len(person.ongoing_income_generating_activities)
             + len(person.high_value_occasional_income_items)
         )
 
-        total_savings = (
+        total_savings_without_securities = (
             sum(cash.value_huf for cash in person.cash)
             + sum(
                 savings_deposit.value_huf for savings_deposit in person.savings_deposits
             )
-            + sum(security.value_huf for security in person.securities)
             + sum(
                 (
                     bank_deposit_claim.value_huf
@@ -85,6 +89,8 @@ class WealthView(Wealth):
             )
             + sum((other_claim.value_huf) for other_claim in person.other_claims)
         )
+
+        total_savings = total_savings_without_securities + total_securities_amount
 
         total_liabilities = (
             sum(bank_loan.value_huf for bank_loan in person.bank_loans)
@@ -99,8 +105,10 @@ class WealthView(Wealth):
             total_vehicle_count=total_vehicle_count,
             total_artwork_count=total_artwork_count,
             total_security_count=total_security_count,
+            total_securities_amount=total_securities_amount,
             total_income_count=total_income_count,
             total_savings=total_savings,
+            total_savings_without_securities=total_savings_without_securities,
             total_liabilities=total_liabilities,
             net_worth=net_worth,
             person=PersonView(

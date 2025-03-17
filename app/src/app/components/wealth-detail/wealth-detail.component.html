@@ -245,6 +245,10 @@
                   <td>{{ security.type }}</td>
                   <td>{{ security.value_huf | number }}</td>
                 </tr>
+                <tr class="table-primary">
+                  <td>Összesen</td>
+                  <td>{{ wealth.total_securities_amount | number }}</td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -257,20 +261,37 @@
           <h3>Megtakarítások</h3>
         </div>
         <div class="card-body">
-          <div class="row">
-            <div class="col-md-6" *ngFor="let savings of wealth.assets.savings_deposit">
-              <p *ngIf="savings.value_huf"><strong>Betét (HUF):</strong> {{ savings.value_huf | number }}</p>
-            </div>
-            <div class="col-md-6" *ngFor="let cash of wealth.assets.cash">
-              <p *ngIf="cash.value_huf"><strong>Készpénz (HUF):</strong> {{ cash.value_huf | number }}</p>
-            </div>
-            <div class="col-md-6" *ngFor="let claim of wealth.assets.claims?.bank_deposit_claims">
-              <p *ngIf="claim.value_huf"><strong>Hitelintézeti számlakövetelés (HUF):</strong> {{ claim.value_huf | number }}</p>
-              <p *ngIf="claim.foreign_currency_value_in_huf"><strong>Hitelintézeti számlakövetelés (devizában):</strong> {{ claim.foreign_currency_value_in_huf | number }}</p>
-            </div>
-            <div class="col-md-6" *ngFor="let claim of wealth.assets.claims?.other_claims">
-              <p *ngIf="claim.value_huf"><strong>Egyéb követelés (HUF):</strong> {{ claim.value_huf | number }}</p>
-            </div>
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Megnevezés</th>
+                  <th>Érték (HUF)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let savings of wealth.assets.savings_deposit">
+                  <td>Betét (HUF)</td>
+                  <td>{{ savings.value_huf | number }}</td>
+                </tr>
+                <tr *ngFor="let cash of wealth.assets.cash">
+                  <td>Készpénz (HUF)</td>
+                  <td>{{ cash.value_huf | number }}</td>
+                </tr>
+                <tr *ngFor="let claim of wealth.assets.claims?.bank_deposit_claims">
+                  <td>Hitelintézeti számlakövetelés (HUF)</td>
+                  <td>{{ claim.value_huf | number }}</td>
+                </tr>
+                <tr *ngFor="let claim of wealth.assets.claims?.other_claims">
+                  <td>Egyéb követelés (HUF)</td>
+                  <td>{{ claim.value_huf | number }}</td>
+                </tr>
+                <tr class="table-primary">
+                  <td>Összesen</td>
+                  <td>{{ wealth.total_savings_without_securities | number }}</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>

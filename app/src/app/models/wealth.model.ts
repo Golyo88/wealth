@@ -210,8 +210,10 @@ export interface WealthView extends Wealth {
   total_vehicle_count: number;
   total_artwork_count: number;
   total_security_count: number;
+  total_securities_amount: number;
   total_income_count: number;
   total_savings: number;
+  total_savings_without_securities: number;
   total_liabilities: number;
   net_worth: number;
 }

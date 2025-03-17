@@ -9,7 +9,7 @@ import {
 } from '../../models/wealth.model';
 import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { DecimalPipe } from '@angular/common';
 import { Liabilities } from '../../models/wealth.model';
@@ -37,10 +37,18 @@ export class WealthListComponent implements OnInit {
   totalPages = 0;
   currentFilters: WealthFilters = {};
 
-  constructor(private wealthService: WealthService) {}
+  constructor(
+    private wealthService: WealthService,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit() {
-    this.loadWealths();
+    this.route.queryParams.subscribe((params) => {
+      if (Object.keys(params).length > 0) {
+        this.currentFilters = params;
+      }
+      this.loadWealths();
+    });
   }
 
   loadWealths() {
