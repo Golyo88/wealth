@@ -122,7 +122,6 @@ async def get_wealths(
     subquery = (
         db.query(
             Person.id,
-            Person.name,
             func.count(distinct(RealEstate.id)).label("real_estates_count"),
             (
                 func.count(distinct(MotorVehicle.id))
@@ -135,16 +134,25 @@ async def get_wealths(
                 + func.count(distinct(HighValueOccasionalIncomeItem.id))
             ).label("income_count"),
             (
-                func.coalesce(func.sum(Security.value_huf), 0)
-                + func.coalesce(func.sum(SavingsDeposit.value_huf), 0)
-                + func.coalesce(func.sum(Cash.value_huf), 0)
-                + func.coalesce(func.sum(BankDepositClaim.value_huf), 0)
-                + func.coalesce(func.sum(OtherClaim.value_huf), 0)
+                func.sum(distinct(func.coalesce(Security.value_huf, 0)))
+                + func.sum(distinct(func.coalesce(SavingsDeposit.value_huf, 0)))
+                + func.sum(distinct(func.coalesce(Cash.value_huf, 0)))
+                + func.sum(distinct(func.coalesce(BankDepositClaim.value_huf, 0)))
+                + func.sum(distinct(func.coalesce(OtherClaim.value_huf, 0)))
             ).label("savings_amount"),
+            func.sum(distinct(func.coalesce(PublicDebt.value_huf, 0))).label(
+                "public_debt_amount"
+            ),
+            func.sum(distinct(func.coalesce(BankLoan.value_huf, 0))).label(
+                "bank_loan_amount"
+            ),
+            func.sum(distinct(func.coalesce(PrivateLoan.value_huf, 0))).label(
+                "private_loan_amount"
+            ),
             (
-                func.coalesce(func.sum(PublicDebt.value_huf), 0)
-                + func.coalesce(func.sum(BankLoan.value_huf), 0)
-                + func.coalesce(func.sum(PrivateLoan.value_huf), 0)
+                func.sum(distinct(func.coalesce(PublicDebt.value_huf, 0)))
+                + func.sum(distinct(func.coalesce(BankLoan.value_huf, 0)))
+                + func.sum(distinct(func.coalesce(PrivateLoan.value_huf, 0)))
             ).label("liabilities_amount"),
         )
         .outerjoin(RealEstate)
@@ -161,7 +169,7 @@ async def get_wealths(
         .outerjoin(PublicDebt)
         .outerjoin(BankLoan)
         .outerjoin(PrivateLoan)
-        .group_by(Person.id, Person.name)
+        .group_by(Person.id)
     ).subquery()
 
     query = db.query(Person, subquery)
